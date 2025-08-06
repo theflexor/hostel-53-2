@@ -8,87 +8,86 @@ import { ImageIcon, BedIcon, HomeIcon, TreesIcon, EyeIcon } from "lucide-react"
 import Image from "next/image"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { motion, AnimatePresence } from "framer-motion"
-
 const galleryImages = [
   {
-    src: "/images/gallery-entrance.png",
+    src: "https://images.unsplash.com/photo-1564326895812-701bb858d5f2?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // entrance
     title: "Main Entrance",
     category: "exterior",
     height: 600,
     width: 400,
   },
   {
-    src: "/images/gallery-reception.png",
+    src: "https://i.pinimg.com/736x/be/0e/43/be0e43de0b2689430f805bb6361ee32b.jpg", // reception
     title: "Reception",
     category: "interior",
     height: 400,
     width: 600,
   },
   {
-    src: "/images/gallery-kitchen.png",
+    src: "https://i.pinimg.com/736x/db/9c/cd/db9ccd821d4dc5f513fe2b3fa6e8a706.jpg", // kitchen
     title: "Common Kitchen",
     category: "interior",
     height: 800,
     width: 600,
   },
   {
-    src: "/images/gallery-courtyard.png",
+    src: "https://i.pinimg.com/1200x/fe/df/1e/fedf1ee8a6272a601c2ce2e5a29c4404.jpg", // courtyard
     title: "Green Courtyard",
     category: "exterior",
     height: 400,
     width: 600,
   },
   {
-    src: "/images/gallery-shower.png",
+    src: "https://i.pinimg.com/736x/20/4e/e8/204ee8184a9a677d7642a42b9c7bdc1e.jpg", // shower
     title: "Shower Room",
     category: "interior",
     height: 600,
     width: 400,
   },
   {
-    src: "/images/gallery-lounge.png",
+    src: "https://i.pinimg.com/1200x/7b/24/5d/7b245d3490aee0da962040b2ac5c1fd7.jpg", // lounge
     title: "Common Area",
     category: "interior",
     height: 400,
     width: 600,
   },
   {
-    src: "/images/gallery-male-dorm.png",
+    src: "https://i.pinimg.com/736x/f2/bc/ac/f2bcaccdaf60077def966c9b369ae397.jpg", // male dorm
     title: "Male Room",
     category: "rooms",
     height: 400,
     width: 600,
   },
   {
-    src: "/images/gallery-female-dorm.png",
+    src: "https://i.pinimg.com/736x/ca/5b/a8/ca5ba846c75231e3c774dfd4cf359637.jpg", // female dorm
     title: "Female Room",
     category: "rooms",
     height: 600,
     width: 400,
   },
   {
-    src: "/images/gallery-mixed-dorm.png",
+    src: "https://i.pinimg.com/736x/e2/d9/0b/e2d90b927e5531e6f52c9c82b09b9687.jpg", // mixed dorm
     title: "Mixed Room",
     category: "rooms",
     height: 400,
     width: 600,
   },
   {
-    src: "/images/gallery-lobby.png",
+    src: "https://i.pinimg.com/736x/2b/7a/40/2b7a40da4e0aac81e16e2f35827b4272.jpg", // lobby
     title: "Lobby",
     category: "interior",
     height: 800,
     width: 600,
   },
   {
-    src: "/images/gallery-terrace.png",
+    src: "https://i.pinimg.com/1200x/9a/e1/8b/9ae18bda155bd94afed2d012b1806412.jpg", // terrace
     title: "Terrace",
     category: "exterior",
     height: 400,
     width: 600,
   },
   {
-    src: "/images/gallery-work-area.png",
+    src: "https://i.pinimg.com/1200x/81/a9/56/81a956778d377646f8b3bf716101969d.jpg", // work area
     title: "Work Area",
     category: "interior",
     height: 600,
@@ -172,12 +171,16 @@ export function GalleryPage() {
               <motion.div
                 key={image.src}
                 layout
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="overflow-hidden rounded-2xl shadow-soft hover:shadow-xl transition-all duration-300 group"
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{
+                  duration: 0.4,
+                  ease: "easeInOut",
+                  delay: index * 0.02,
+                }}
                 onClick={() => setSelectedImage(image.src)}
+                className="overflow-hidden rounded-2xl shadow-md hover:shadow-2xl  group cursor-pointer bg-white dark:bg-zinc-900 hover:-translate-y-1"
               >
                 <div className="relative cursor-pointer">
                   <Image
@@ -185,7 +188,7 @@ export function GalleryPage() {
                     alt={getLocalizedTitle(image.title)}
                     width={image.width}
                     height={image.height}
-                    className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-110"
+                    className="w-full h-auto object-cover transition-transform "
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-start p-4">
                     <div className="flex items-center gap-2 text-white bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full">

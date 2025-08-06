@@ -17,7 +17,7 @@ import {
 import { useLanguage } from "@/hooks/useLanguage"
 
 interface DateRangePickerProps {
-  onDateRangeChange: (range: { from?: Date; to?: Date }) => void
+  onDateRangeChange: (range: { from?: string; to?: string }) => void
   className?: string
 }
 
@@ -32,9 +32,17 @@ export function DateRangePicker({
   const handleDateSelect = React.useCallback(
     (newDate: DateRange | undefined) => {
       setDate(newDate)
-      onDateRangeChange({ from: newDate?.from, to: newDate?.to })
 
-      // Закрываем календарь если выбраны обе даты
+      const formatToDateTime = (date?: Date) =>
+        date
+          ? date.toISOString().slice(0, 19) // убираем миллисекунды и 'Z'
+          : undefined
+
+      onDateRangeChange({
+        from: formatToDateTime(newDate?.from),
+        to: formatToDateTime(newDate?.to),
+      })
+
       if (newDate?.from && newDate?.to) {
         setIsOpen(false)
       }

@@ -21,7 +21,7 @@ const translations = {
     currency: "s",
     guest: "guest",
     guests: "Guests",
-    guestForms: "guest | guests",
+    guestForms: "guest | guests asdasd",
     support: "Support",
     search: "Search",
     checkIn: "Check In",
@@ -62,7 +62,8 @@ const translations = {
 
     // Pages & Sections
     galleryTitle: "Our Gallery",
-    gallerySubtitle: "Explore the atmosphere of our hostel, from cozy rooms to vibrant common areas.",
+    gallerySubtitle:
+      "Explore the atmosphere of our hostel, from cozy rooms to vibrant common areas.",
     allPhotos: "All",
     roomsPhotos: "Rooms",
     interiorPhotos: "Interior",
@@ -71,7 +72,8 @@ const translations = {
     viewPhoto: "View Photo",
 
     aboutTitle: "About Us",
-    aboutSubtitle: "Learn more about Hostel 53 and our philosophy of hospitality.",
+    aboutSubtitle:
+      "Learn more about Hostel 53 and our philosophy of hospitality.",
     ourStory: "Our Story",
     ourStoryText1:
       "Hostel 53 was founded with a simple idea: to provide travelers and students with comfortable, safe, and affordable accommodation in the heart of Bishkek. We understand that every guest is unique, so we strive to create an atmosphere where everyone feels at home.",
@@ -134,11 +136,14 @@ const translations = {
     next: "Next",
     confirmAndBook: "Confirm & Book",
     close: "Close",
-    confirmBookingDetails: "Please review your booking details before confirming.",
+    confirmBookingDetails:
+      "Please review your booking details before confirming.",
     room: "Room",
-    paymentText: "Payment is made at the hostel upon check-in. We accept cash and credit cards.",
+    paymentText:
+      "Payment is made at the hostel upon check-in. We accept cash and credit cards.",
     bookingConfirmedTitle: "Booking Confirmed!",
-    bookingConfirmedText: "Thank you for choosing Hostel 53! A confirmation has been sent to your email.",
+    bookingConfirmedText:
+      "Thank you for choosing Hostel 53! A confirmation has been sent to your email.",
     bookingError: "Booking failed. Please try again.",
 
     // Home Page
@@ -180,7 +185,8 @@ const translations = {
     provideTitle6: "24/7 Reception",
     provideDesc6: "We are always here to help you, day or night.",
     ctaTitle: "Ready for a Comfortable Stay?",
-    ctaSubtitle: "Book your room now and experience the best hospitality in Bishkek.",
+    ctaSubtitle:
+      "Book your room now and experience the best hospitality in Bishkek.",
 
     // Booking Form
     firstName: "First Name",
@@ -189,7 +195,8 @@ const translations = {
     specialRequests: "Special Requests",
 
     // Footer
-    footerDescription: "Comfort, coziness, and affordability in the heart of Bishkek.",
+    footerDescription:
+      "Comfort, coziness, and affordability in the heart of Bishkek.",
     quickLinks: "Quick Links",
     contacts: "Contacts",
     allRightsReserved: "All rights reserved.",
@@ -256,7 +263,8 @@ const translations = {
 
     // Pages & Sections
     galleryTitle: "Наша галерея",
-    gallerySubtitle: "Окунитесь в атмосферу нашего хостела, от уютных комнат до ярких общих зон.",
+    gallerySubtitle:
+      "Окунитесь в атмосферу нашего хостела, от уютных комнат до ярких общих зон.",
     allPhotos: "Все",
     roomsPhotos: "Номера",
     interiorPhotos: "Интерьер",
@@ -265,7 +273,8 @@ const translations = {
     viewPhoto: "Посмотреть фото",
 
     aboutTitle: "О нас",
-    aboutSubtitle: "Узнайте больше о Хостеле 53 и нашей философии гостеприимства.",
+    aboutSubtitle:
+      "Узнайте больше о Хостеле 53 и нашей философии гостеприимства.",
     ourStory: "Наша история",
     ourStoryText1:
       "Хостел 53 был создан с простой идеей - предоставить путешественникам и студентам комфортное, безопасное и доступное жилье в самом сердце Бишкека. Мы понимаем, что каждый гость уникален, поэтому стремимся создать атмосферу, где каждый чувствует себя как дома.",
@@ -328,11 +337,14 @@ const translations = {
     next: "Далее",
     confirmAndBook: "Подтвердить и забронировать",
     close: "Закрыть",
-    confirmBookingDetails: "Пожалуйста, проверьте детали вашего бронирования перед подтверждением.",
+    confirmBookingDetails:
+      "Пожалуйста, проверьте детали вашего бронирования перед подтверждением.",
     room: "Номер",
-    paymentText: "Оплата производится в хостеле при заселении. Принимаем наличные и банковские карты.",
+    paymentText:
+      "Оплата производится в хостеле при заселении. Принимаем наличные и банковские карты.",
     bookingConfirmedTitle: "Бронирование подтверждено!",
-    bookingConfirmedText: "Спасибо за выбор Хостела 53! Подтверждение отправлено на вашу почту.",
+    bookingConfirmedText:
+      "Спасибо за выбор Хостела 53! Подтверждение отправлено на вашу почту.",
     bookingError: "Ошибка бронирования. Пожалуйста, попробуйте снова.",
 
     // Home Page
@@ -346,7 +358,8 @@ const translations = {
     foundRooms: "Найдено {count} номеров",
     whyUsTitle: "Почему выбирают нас",
     whyUsTitle1: "Идеальное расположение",
-    whyUsDesc1: "В самом центре Бишкека, рядом со всеми достопримечательностями.",
+    whyUsDesc1:
+      "В самом центре Бишкека, рядом со всеми достопримечательностями.",
     whyUsTitle2: "Безопасность",
     whyUsDesc2: "Круглосуточная охрана, видеонаблюдение, безопасные шкафчики.",
     whyUsTitle3: "Комфорт и чистота",
@@ -374,7 +387,8 @@ const translations = {
     provideTitle6: "Ресепшн 24/7",
     provideDesc6: "Всегда готовы вам помочь.",
     ctaTitle: "Готовы к комфортному проживанию?",
-    ctaSubtitle: "Забронируйте номер сейчас и испытайте лучшее гостеприимство в Бишкеке.",
+    ctaSubtitle:
+      "Забронируйте номер сейчас и испытайте лучшее гостеприимство в Бишкеке.",
 
     // Booking Form
     firstName: "Имя",
@@ -460,7 +474,8 @@ const translations = {
     viewPhoto: "Сүрөттү көрүү",
 
     aboutTitle: "Биз жөнүндө",
-    aboutSubtitle: "Хостел 53 жана биздин меймандостук философиябыз жөнүндө көбүрөөк билиңиз.",
+    aboutSubtitle:
+      "Хостел 53 жана биздин меймандостук философиябыз жөнүндө көбүрөөк билиңиз.",
     ourStory: "Биздин окуя",
     ourStoryText1:
       "Хостел 53 жөнөкөй идея менен түзүлгөн - саякатчыларга жана студенттерге Бишкектин борборунда ыңгайлуу, коопсуз жана жеткиликтүү турак жай берүү. Ар бир конок уникалдуу экенин түшүнөбүз, ошондуктан ар бир адам өзүн үйүндөгүдөй сезе турган чөйрө түзүүгө аракет кылабыз.",
@@ -484,7 +499,8 @@ const translations = {
     openInGoogleMaps: "Google Картада ачуу",
 
     reviewsTitle: "Коноктордун сын-пикирлери",
-    reviewsSubtitle: "Биздин коноктордун жашоосу жөнүндө эмне деп жатканын көрүңүз.",
+    reviewsSubtitle:
+      "Биздин коноктордун жашоосу жөнүндө эмне деп жатканын көрүңүз.",
     overallRating: "Жалпы баа",
     totalReviews: "Жалпы сын-пикирлер",
     ratingDistribution: "Баалардын бөлүштүрүлүшү",
@@ -523,11 +539,14 @@ const translations = {
     next: "Андан ары",
     confirmAndBook: "Тастыктоо жана ээлөө",
     close: "Жабуу",
-    confirmBookingDetails: "Тастыктоодон мурун ээлөө маалыматыңызды текшериңиз.",
+    confirmBookingDetails:
+      "Тастыктоодон мурун ээлөө маалыматыңызды текшериңиз.",
     room: "Бөлмө",
-    paymentText: "Төлөм хостелге келгенде жүргүзүлөт. Накталай акча жана банк карталарын кабыл алабыз.",
+    paymentText:
+      "Төлөм хостелге келгенде жүргүзүлөт. Накталай акча жана банк карталарын кабыл алабыз.",
     bookingConfirmedTitle: "Брондоо ырасталды!",
-    bookingConfirmedText: "Хостел 53 тандаганыңыз үчүн рахмат! Ырастоо сиздин электрондук почтаңызга жөнөтүлдү.",
+    bookingConfirmedText:
+      "Хостел 53 тандаганыңыз үчүн рахмат! Ырастоо сиздин электрондук почтаңызга жөнөтүлдү.",
     bookingError: "Ээлөөдө ката кетти. Кайталап көрүңүз.",
 
     // Home Page
@@ -569,7 +588,8 @@ const translations = {
     provideTitle6: "24/7 кабыл алуу",
     provideDesc6: "Биз сизге жардам берүүгө дайым даярбыз.",
     ctaTitle: "Ыңгайлуу эс алууга даярсызбы?",
-    ctaSubtitle: "Азыр бөлмөңүздү брондоп, Бишкектеги эң мыкты меймандостукту сезиңиз.",
+    ctaSubtitle:
+      "Азыр бөлмөңүздү брондоп, Бишкектеги эң мыкты меймандостукту сезиңиз.",
 
     // Booking Form
     firstName: "Аты",
@@ -578,7 +598,8 @@ const translations = {
     specialRequests: "Атайын суроо-талаптар",
 
     // Footer
-    footerDescription: "Бишкектин борборунда жылуулук, ыңгайлуулук жана жеткиликтүүлүк.",
+    footerDescription:
+      "Бишкектин борборунда жылуулук, ыңгайлуулук жана жеткиликтүүлүк.",
     quickLinks: "Тез шилтемелер",
     contacts: "Байланыштар",
     allRightsReserved: "Бардык укуктар корголгон.",
@@ -592,7 +613,8 @@ const pluralize = (lang: Language, count: number, forms: string[]): string => {
   if (lang === "ru") {
     if (forms.length === 3) {
       const cases = [2, 0, 1, 1, 1, 2]
-      const formIndex = count % 100 > 4 && count % 100 < 20 ? 2 : cases[Math.min(count % 10, 5)]
+      const formIndex =
+        count % 100 > 4 && count % 100 < 20 ? 2 : cases[Math.min(count % 10, 5)]
       return forms[formIndex]
     }
   }
@@ -605,10 +627,16 @@ const pluralize = (lang: Language, count: number, forms: string[]): string => {
 }
 
 export const useTranslation = (language: Language) => {
-  const t = (key: keyof typeof translations.en, params?: Record<string, string | number>): string => {
+  const t = (
+    key: keyof typeof translations.en,
+    params?: Record<string, string | number>
+  ): string => {
     let str = translations[language]?.[key] ?? translations.en[key] ?? key
 
-    if (params?.count !== undefined && (key === "guestForms" || key === "nights")) {
+    if (
+      params?.count !== undefined &&
+      (key === "guestForms" || key === "nights")
+    ) {
       const forms = str.split(" | ")
       str = pluralize(language, params.count as number, forms)
     }

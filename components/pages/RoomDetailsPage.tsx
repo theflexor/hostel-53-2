@@ -63,6 +63,8 @@ export function RoomDetailsPage({ room }: RoomDetailsPageProps) {
     ))
   }
 
+  console.log(room)
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow-sm border-b">

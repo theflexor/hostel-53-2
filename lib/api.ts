@@ -16,17 +16,12 @@ export function adaptRoomData(raw: RawRoomData): Room {
     return "mixed"
   }
 
-  // Replace low-res images with higher-res ones by changing the URL structure
-  const highResImages = raw.pictureUrls.map((url) =>
-    url.replace(/square60/g, "large")
-  )
-
   return {
     id: raw.id,
     name: raw.title,
     description: raw.description,
     price: raw.price ?? 1200, // Provide a default price if null
-    images: highResImages,
+    images: raw.pictureUrls,
     amenities: raw.amenities,
     capacity: raw.capacity,
     gender: getGender(raw.categoryName),

@@ -1,5 +1,6 @@
 "use client"
 
+import dayjs from "dayjs"
 import React, { useState, useMemo } from "react"
 import {
   Dialog,
@@ -72,13 +73,15 @@ export function BookingFlow({ room, children }: BookingFlowProps) {
     return diff > 0 ? diff : 0
   }, [formData.checkIn, formData.checkOut])
 
+  console.log(nights)
+
   const totalPrice = useMemo(() => nights * room.price, [nights, room.price])
 
-  const handleDateChange = (range: { from?: Date; to?: Date }) => {
+  const handleDateChange = (range: { from?: string; to?: string }) => {
     setFormData((prev) => ({
       ...prev,
-      checkIn: range.from ? range.from.toISOString().split("T")[0] : "",
-      checkOut: range.to ? range.to.toISOString().split("T")[0] : "",
+      checkIn: range.from ? range.from : "",
+      checkOut: range.to ? range.to : "",
     }))
   }
 
@@ -255,11 +258,15 @@ export function BookingFlow({ room, children }: BookingFlowProps) {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">{t("checkIn")}</span>
-                  <span className="font-semibold">{formData.checkIn}</span>
+                  <span className="font-semibold">
+                    {dayjs(formData.checkIn).format("DD.MM.YYYY")}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">{t("checkOut")}</span>
-                  <span className="font-semibold">{formData.checkOut}</span>
+                  <span className="font-semibold">
+                    {dayjs(formData.checkOut).format("DD.MM.YYYY")}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">{t("guests")}</span>

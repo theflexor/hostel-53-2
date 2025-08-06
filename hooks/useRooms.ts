@@ -2,7 +2,13 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchAvailableRooms, fetchRoomById } from "@/lib/api"
-import type { Room, CreateRoomData, UpdateRoomData, SearchFilters } from "@/lib/types"
+import type {
+  Room,
+  CreateRoomData,
+  UpdateRoomData,
+  SearchFilters,
+} from "@/lib/types"
+import React from "react"
 
 // Helper to get default dates for initial load
 const getDefaultDates = () => {
@@ -17,17 +23,20 @@ const getDefaultDates = () => {
 
 // Fetch rooms available for a given period
 export const useRooms = (filters?: SearchFilters) => {
-  const { startDate, endDate } = getDefaultDates()
-  // Use provided dates from filters, or default dates
+  const { startDate, endDate } = React.useMemo(() => getDefaultDates(), [])
   const checkInDate = filters?.checkIn || startDate
   const checkOutDate = filters?.checkOut || endDate
+  console.log(filters)
 
-  const queryKey = ["rooms", checkInDate, checkOutDate]
+  const queryKey = React.useMemo(
+    () => ["rooms", checkInDate, checkOutDate],
+    [checkInDate, checkOutDate]
+  )
 
   return useQuery<Room[], Error>({
-    queryKey: queryKey,
+    queryKey,
     queryFn: () => fetchAvailableRooms(checkInDate, checkOutDate),
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000, // 5 минут
   })
 }
 
@@ -47,12 +56,19 @@ export const useSearchRooms = () => {
   return useMutation<Room[], Error, SearchFilters>({
     mutationFn: (filters: SearchFilters) => {
       const { startDate, endDate } = getDefaultDates()
-      return fetchAvailableRooms(filters.checkIn || startDate, filters.checkOut || endDate)
+      return fetchAvailableRooms(
+        filters.checkIn || startDate,
+        filters.checkOut || endDate
+      )
     },
     onSuccess: (data, variables) => {
       // When search is successful, update the cache for the main 'rooms' query
       const { startDate, endDate } = getDefaultDates()
-      const queryKey = ["rooms", variables.checkIn || startDate, variables.checkOut || endDate]
+      const queryKey = [
+        "rooms",
+        variables.checkIn || startDate,
+        variables.checkOut || endDate,
+      ]
       queryClient.setQueryData(queryKey, data)
     },
   })
@@ -108,7 +124,15 @@ export const useDeleteRoom = () => {
 
 export const useCheckAvailability = () => {
   return useMutation({
-    mutationFn: async ({ roomId, checkIn, checkOut }: { roomId: number; checkIn: string; checkOut: string }) => {
+    mutationFn: async ({
+      roomId,
+      checkIn,
+      checkOut,
+    }: {
+      roomId: number
+      checkIn: string
+      checkOut: string
+    }) => {
       console.log("Mock Check Availability:", { roomId, checkIn, checkOut })
       await new Promise((resolve) => setTimeout(resolve, 300))
       return { available: true }

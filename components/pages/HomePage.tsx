@@ -42,20 +42,21 @@ import Image from "next/image"
 import Link from "next/link"
 import { mockRooms } from "@/lib/mockData"
 import { useLanguage } from "@/hooks/useLanguage"
+import { get } from "http"
 
 const carouselImages = [
   {
-    src: "/images/hero-exterior.png",
+    src: "https://i.pinimg.com/1200x/97/28/fc/9728fc985a4bab0f28a81330055c9486.jpg",
     titleKey: "carouselTitle1",
     subtitleKey: "carouselSubtitle1",
   },
   {
-    src: "/images/hero-lounge.png",
+    src: "https://i.pinimg.com/1200x/e9/7c/fd/e97cfdc895c5138968be1df73519b87b.jpg",
     titleKey: "carouselTitle2",
     subtitleKey: "carouselSubtitle2",
   },
   {
-    src: "/images/hero-courtyard.png",
+    src: "https://i.pinimg.com/736x/7d/1c/7c/7d1c7ce6661ff915ce2217f722a4c6f9.jpg",
     titleKey: "carouselTitle3",
     subtitleKey: "carouselSubtitle3",
   },
@@ -95,9 +96,7 @@ export function HomePage() {
     roomType: "any",
     sortBy: "price_asc",
   })
-
-  const { data } = useRooms(searchFilters)
-
+  const { data: allRooms, refetch } = useRooms()
   useEffect(() => {
     const interval = setInterval(() => {
       setCarouselIndex((prev) => (prev + 1) % carouselImages.length)
@@ -105,11 +104,11 @@ export function HomePage() {
     return () => clearInterval(interval)
   }, [])
 
-  const handleDateRangeChange = (range: { from?: Date; to?: Date }) => {
+  const handleDateRangeChange = (range: { from?: string; to?: string }) => {
     setSearchFilters((prev) => ({
       ...prev,
-      checkIn: range.from ? range.from.toISOString().split("T")[0] : "",
-      checkOut: range.to ? range.to.toISOString().split("T")[0] : "",
+      checkIn: range.from ? range.from : "",
+      checkOut: range.to ? range.to : "",
     }))
   }
 
@@ -117,7 +116,7 @@ export function HomePage() {
     setIsSearching(true)
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    let filtered = [...mockRooms]
+    let filtered = [...(allRooms || [])]
     if (searchFilters.guests) {
       filtered = filtered.filter(
         (room) => room.capacity >= searchFilters.guests
@@ -196,7 +195,6 @@ export function HomePage() {
     },
     { icon: ClockIcon, titleKey: "provideTitle6", descKey: "provideDesc6" },
   ]
-
   return (
     <>
       {/* Hero Section */}
@@ -454,7 +452,7 @@ export function HomePage() {
         </section>
       )}
 
-      {!showSearchResults && (
+      {!showSearchResults && allRooms && (
         <>
           <section className="py-12 sm:py-16 bg-gradient-to-br from-blue-50 via-white to-primary-50">
             <div className="container mx-auto px-4">
@@ -467,7 +465,7 @@ export function HomePage() {
                 </p>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
-                {mockRooms.map((room, index) => (
+                {allRooms.map((room, index) => (
                   <div
                     key={room.id}
                     className="animate-fade-in"
