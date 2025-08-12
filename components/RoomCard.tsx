@@ -189,14 +189,14 @@ export function RoomCard({ room }: RoomCardProps) {
                 {t("viewDetails")}
               </Link>
             </Button>
-            <BookingFlow room={room}>
+            <Link href={`/rooms/${room.id}/booking`}>
               <Button
                 size="sm"
                 className="bg-primary-gradient hover:shadow-lg text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-300 hover:scale-105 text-xs sm:text-sm px-2 py-1 sm:px-4 sm:py-2 h-7 sm:h-auto"
               >
                 {t("book")}
               </Button>
-            </BookingFlow>
+            </Link>
           </div>
         </div>
       </div>

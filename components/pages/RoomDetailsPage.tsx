@@ -63,8 +63,6 @@ export function RoomDetailsPage({ room }: RoomDetailsPageProps) {
     ))
   }
 
-  console.log(room)
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow-sm border-b">
@@ -241,11 +239,11 @@ export function RoomDetailsPage({ room }: RoomDetailsPageProps) {
                     </div>
                     <div className="text-gray-500">{t("perNight")}</div>
                   </div>
-                  <BookingFlow room={room}>
+                  <Link href={`/rooms/${room.id}/booking`}>
                     <Button className="w-full bg-primary-gradient hover:shadow-lg text-white py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 mb-4">
                       {t("bookNow")}
                     </Button>
-                  </BookingFlow>
+                  </Link>
                   <div className="text-center text-sm text-gray-500 mb-6">
                     {t("freeCancellation")}
                   </div>

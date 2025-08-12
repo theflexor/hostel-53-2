@@ -2,9 +2,12 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { BookingData, CreateBookingData } from "@/lib/types"
+import { bookBeds } from "@/lib/api"
 
 // Mock function for development
-const saveMockBooking = async (booking: CreateBookingData): Promise<BookingData> => {
+const saveMockBooking = async (
+  booking: CreateBookingData
+): Promise<BookingData> => {
   await new Promise((resolve) => setTimeout(resolve, 1000))
 
   const newBooking: BookingData = {
@@ -44,7 +47,20 @@ export const useCreateBooking = () => {
 
   return useMutation({
     mutationFn: async (bookingData: CreateBookingData) => {
-      return await saveMockBooking(bookingData)
+      const payload = {
+        firstName: bookingData.firstName,
+        lastName: bookingData.lastName,
+        email: bookingData.email,
+        phone: bookingData.phone,
+        guests: bookingData.selectedBedIds.length,
+        roomId: bookingData.roomId, // 🔁 Заменить на актуальный ID комнаты (или добавить в интерфейс)
+        startTime: bookingData.checkIn,
+        endTime: bookingData.checkOut,
+        comments: bookingData.specialRequests,
+        bunkIds: bookingData.selectedBedIds,
+      }
+
+      return await bookBeds(payload)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bookings"] })
@@ -81,7 +97,13 @@ export const useUpdateBookingStatus = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: BookingData["status"] }) => {
+    mutationFn: async ({
+      id,
+      status,
+    }: {
+      id: string
+      status: BookingData["status"]
+    }) => {
       await new Promise((resolve) => setTimeout(resolve, 500))
       console.log("Mock: Updating booking status", { id, status })
       // In a real app, you'd update localStorage here
@@ -105,7 +127,11 @@ export const useCancelBooking = () => {
       await new Promise((resolve) => setTimeout(resolve, 500))
       console.log("Mock: Cancelling booking", id)
       // In a real app, you'd update localStorage here
-      return { id, status: "cancelled", success: true } as unknown as BookingData
+      return {
+        id,
+        status: "cancelled",
+        success: true,
+      } as unknown as BookingData
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["bookings"] })

@@ -16,6 +16,14 @@ export interface Room {
   categoryId: number
 }
 
+export interface Bed {
+  id: number
+  number: number
+  tier: "BOTTOM" | "TOP"
+  roomId: number
+  available: boolean
+}
+
 // This represents the raw data structure from the API
 export interface RawRoomData {
   id: number
@@ -74,15 +82,16 @@ export interface BookingData {
 }
 
 export interface CreateBookingData {
-  roomId: number
+  checkIn: string
+  checkOut: string
   firstName: string
   lastName: string
   email: string
   phone: string
-  checkIn: string
-  checkOut: string
-  guests: number
-  specialRequests?: string
+  selectedBedIds: number[]
+  specialRequests: string
+  arrivalTime: string
+  roomId: number // This should be the ID of the room being booked
 }
 
 export interface ContactFormData {

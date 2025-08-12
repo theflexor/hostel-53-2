@@ -1,6 +1,19 @@
-import type { RawRoomData, Room } from "./types"
+import type { Bed, RawRoomData, Room } from "./types"
 
 const API_BASE_URL = "http://109.205.178.197:8080/api/v1"
+
+type BookingPayload = {
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  guests: number
+  roomId: number
+  startTime: string
+  endTime: string
+  comments: string
+  bunkIds: number[]
+}
 
 // Adapter function to transform raw API data into the format used by the app's components
 export function adaptRoomData(raw: RawRoomData): Room {
@@ -41,7 +54,7 @@ export async function fetchAvailableRooms(
   endDate: string
 ): Promise<Room[]> {
   const response = await fetch(
-    `${API_BASE_URL}/rooms/available-rooms?startDate=${startDate}&endDate=${endDate}`
+    `${API_BASE_URL}/rooms?startDate=${startDate}&endDate=${endDate}`
   )
   if (!response.ok) {
     const errorBody = await response.text()
@@ -62,4 +75,47 @@ export async function fetchRoomById(id: number): Promise<Room> {
   }
   const rawData: RawRoomData = await response.json()
   return adaptRoomData(rawData)
+}
+
+export async function fetchBedsById({
+  endTime,
+  roomId,
+  startTime,
+}: {
+  roomId: number
+  startTime: string
+  endTime: string
+}): Promise<Bed[]> {
+  const response = await fetch(
+    `${API_BASE_URL}/bunks/get-available-bunks` +
+      `?roomId=${roomId}&startTime=${encodeURIComponent(
+        startTime
+      )}&endTime=${encodeURIComponent(endTime)}`
+  )
+
+  if (!response.ok) {
+    const errorBody = await response.text()
+    console.error(`Failed to fetch beds for room with id ${roomId}:`, errorBody)
+    throw new Error(`Failed to fetch beds for room with id ${roomId}`)
+  }
+  const data = await response.json()
+  return data
+}
+
+export async function bookBeds(payload: BookingPayload): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/bookings/create-booking`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    console.error("Failed to create booking:", errorText)
+    throw new Error("Booking request failed")
+  }
+
+  console.log("Booking created successfully")
 }

@@ -11,17 +11,70 @@ const translations = {
     faq: "FAQ",
     privacyPolicy: "Privacy Policy",
     information: "Information",
-
+    selectedBeds: "Selected beds",
+    bed: "Bed",
+    termsAndConditions: "I agree to the booking terms and conditions",
+    step1: "Step 1: Choose Dates",
+    step2: "Step 2: Select Beds",
+    step3: "Step 3: Your Information",
+    step4: "Step 4: Confirmation",
+    step5: "Booking Confirmed!",
+    confirmAndBook: "Confirm and Book",
+    confirmYourBookingTitle: "Confirm Your Booking",
+    confirmYourBookingSubtitle:
+      "Review your booking details before confirming.",
+    secureBooking: "Secure Booking",
+    selectYourDates: "Select your check-in and check-out dates",
+    topBunks: "Top Bunks",
+    bottomBunks: "Bottom Bunks",
+    arrivalTime: "Arrival Time",
+    morning: "Morning",
+    afternoon: "Afternoon",
+    evening: "Evening",
+    late: "Late",
+    specialRequestsPlaceholder:
+      "Any special wishes? For example, a quiet bed or a garden view.",
+    bookingTitle: "Booking Your Stay",
+    bookingSubtitle: "Book your spot quickly and easily",
+    selectDates: "Select Dates",
+    loadingBeds: "Loading available beds...",
+    errorFetchingBeds: "Error loading beds. Please try again.",
+    noBedsAvailable: "No beds available for the selected dates.",
+    maxGuestsReached: "Maximum number of beds ({count}) selected.",
+    available: "Available",
+    booked: "Booked",
+    requiredField: "Required field",
+    invalidEmail: "Invalid email address",
+    agreeToTerms: "You must agree to the terms and conditions.",
+    total: "Total",
+    paymentText: "Your payment information is securely protected.",
+    bookingConfirmedTitle: "Booking Confirmed!",
+    bookingConfirmedText: "We have sent a confirmation to your email.",
+    bookingReference: "Booking Reference",
+    downloadConfirmation: "Download Confirmation",
+    shareBooking: "Share Booking",
+    close: "Close",
+    back: "Back",
+    next: "Next",
+    pleaseSelectValidDates: "Please select valid dates.",
+    pleaseSelectAtLeastOneBed: "Please select at least one bed.",
+    pleaseSelectDatesFirst: "Please select your dates first.",
+    firstName: "First Name",
+    lastName: "Last Name",
+    email: "Email",
+    specialRequests: "Special Requests",
+    nights: "night | nights",
+    guest: "guest",
+    guests: "guests",
+    bookingCheckoutTitle: "Booking Checkout",
+    bookingCheckoutSubtitle: "Complete the steps to secure your room",
     // Common
     book: "Book",
     bookNow: "Book Now",
     viewDetails: "Details",
-    available: "Available",
     perNight: "per night",
     currency: "s",
-    guest: "guest",
-    guests: "Guests",
-    guestForms: "guest | guests asdasd",
+    guestForms: "guest | guests",
     support: "Support",
     search: "Search",
     checkIn: "Check In",
@@ -32,6 +85,7 @@ const translations = {
     rating: "Rating",
     features: "Features",
     amenities: "Amenities",
+
     address: "Address",
     phone: "Phone",
     workingHours: "Working Hours",
@@ -50,7 +104,6 @@ const translations = {
     getOffer: "Get Offer",
     viewAllRooms: "View All Rooms",
     processing: "Processing...",
-    total: "Total",
     free: "Free",
     freeCancellation: "Free cancellation up to 24 hours before check-in",
     contactUs: "Contact Us",
@@ -95,7 +148,8 @@ const translations = {
     sendMessage: "Send Message",
     interactiveMap: "Interactive Map",
     openInGoogleMaps: "Open in Google Maps",
-
+    ourRoomsSubtitle:
+      "Choose a room that fits your needs from our wide selection of cozy and clean accommodations.",
     reviewsTitle: "Guest Reviews",
     reviewsSubtitle: "See what our guests have to say about their stay.",
     overallRating: "Overall Rating",
@@ -124,26 +178,11 @@ const translations = {
       "We take reasonable measures to help protect your personal information from loss, theft, misuse, and unauthorized access, disclosure, alteration, and destruction.",
 
     // Booking Flow
-    bookingTitle: "Booking Your Stay",
-    bookingSubtitle: "Complete the steps to secure your room",
-    step1: "Dates",
-    step2: "Details",
-    step3: "Confirm",
-    selectDates: "Select your dates",
+
     selectGuests: "Select number of guests",
-    nights: "night | nights",
-    back: "Back",
-    next: "Next",
-    confirmAndBook: "Confirm & Book",
-    close: "Close",
     confirmBookingDetails:
       "Please review your booking details before confirming.",
     room: "Room",
-    paymentText:
-      "Payment is made at the hostel upon check-in. We accept cash and credit cards.",
-    bookingConfirmedTitle: "Booking Confirmed!",
-    bookingConfirmedText:
-      "Thank you for choosing Hostel 53! A confirmation has been sent to your email.",
     bookingError: "Booking failed. Please try again.",
 
     // Home Page
@@ -188,12 +227,6 @@ const translations = {
     ctaSubtitle:
       "Book your room now and experience the best hospitality in Bishkek.",
 
-    // Booking Form
-    firstName: "First Name",
-    lastName: "Last Name",
-    email: "Email",
-    specialRequests: "Special Requests",
-
     // Footer
     footerDescription:
       "Comfort, coziness, and affordability in the heart of Bishkek.",
@@ -203,6 +236,66 @@ const translations = {
   },
 
   ru: {
+    ourRoomsSubtitle:
+      "Выберите номер, который подходит именно вам, из нашего широкого выбора уютных и чистых комнат.",
+    selectedBeds: "Выбрано коек",
+    bed: "Койка",
+    termsAndConditions: "Я согласен с условиями бронирования",
+    step1: "Шаг 1: Даты",
+    step2: "Шаг 2: Выбор коек",
+    step3: "Шаг 3: Ваши данные",
+    step4: "Шаг 4: Подтверждение",
+    step5: "Бронирование подтверждено!",
+    confirmAndBook: "Подтвердить и забронировать",
+    confirmYourBookingTitle: "Подтвердите бронирование",
+    confirmYourBookingSubtitle:
+      "Проверьте детали бронирования перед подтверждением.",
+    secureBooking: "Безопасное бронирование",
+    selectYourDates: "Выберите даты заезда и выезда",
+    topBunks: "Верхние койки",
+    bottomBunks: "Нижние койки",
+    arrivalTime: "Время прибытия",
+    morning: "Утро",
+    afternoon: "День",
+    evening: "Вечер",
+    late: "Позднее",
+    specialRequestsPlaceholder:
+      "Есть особые пожелания? Например, тихая койка или вид на сад.",
+    bookingTitle: "Оформление бронирования",
+    bookingSubtitle: "Быстро и просто забронируйте место",
+    selectDates: "Выберите даты",
+    loadingBeds: "Загрузка доступных коек...",
+    errorFetchingBeds: "Ошибка при загрузке коек. Попробуйте еще раз.",
+    noBedsAvailable: "На выбранные даты нет доступных коек.",
+    maxGuestsReached: "Выбрано максимальное количество коек ({count}).",
+    available: "Доступно",
+    booked: "Занято",
+    requiredField: "Обязательное поле",
+    invalidEmail: "Некорректный адрес электронной почты",
+    agreeToTerms: "Вы должны согласиться с условиями.",
+    total: "Итого",
+    paymentText: "Ваша платежная информация надежно защищена.",
+    bookingConfirmedTitle: "Бронирование подтверждено!",
+    bookingConfirmedText:
+      "Мы отправили подтверждение на вашу электронную почту.",
+    bookingReference: "Номер бронирования",
+    downloadConfirmation: "Скачать подтверждение",
+    shareBooking: "Поделиться бронированием",
+    close: "Закрыть",
+    back: "Назад",
+    next: "Далее",
+    pleaseSelectValidDates: "Пожалуйста, выберите корректные даты.",
+    pleaseSelectAtLeastOneBed: "Пожалуйста, выберите хотя бы одну койку.",
+    pleaseSelectDatesFirst: "Пожалуйста, сначала выберите даты.",
+    firstName: "Имя",
+    lastName: "Фамилия",
+    email: "Email",
+    specialRequests: "Особые пожелания",
+    nights: "ночь | ночи | ночей",
+    guest: "гость",
+    guests: "гости",
+    bookingCheckoutTitle: "Оформление бронирования",
+    bookingCheckoutSubtitle: "Заполните все шаги, чтобы забронировать номер",
     // Navigation & Titles
     home: "Главная",
     gallery: "Галерея",
@@ -217,11 +310,8 @@ const translations = {
     book: "Бронь",
     bookNow: "Забронировать",
     viewDetails: "Подробнее",
-    available: "Доступно",
     perNight: "за ночь",
     currency: "с",
-    guest: "гость",
-    guests: "Гости",
     guestForms: "гость | гостя | гостей",
     support: "Поддержка",
     search: "Поиск",
@@ -251,7 +341,6 @@ const translations = {
     getOffer: "Получить скидку",
     viewAllRooms: "Посмотреть все номера",
     processing: "Обработка...",
-    total: "Итого",
     free: "Бесплатно",
     freeCancellation: "Бесплатная отмена за 24 часа до заезда",
     contactUs: "Связаться с нами",
@@ -325,26 +414,11 @@ const translations = {
       "Мы принимаем разумные меры для защиты вашей личной информации от потери, кражи, неправомерного использования и несанкционированного доступа, раскрытия, изменения и уничтожения.",
 
     // Booking Flow
-    bookingTitle: "Бронирование номера",
-    bookingSubtitle: "Заполните все шаги, чтобы забронировать номер",
-    step1: "Даты",
-    step2: "Данные",
-    step3: "Подтверждение",
-    selectDates: "Выберите даты",
-    selectGuests: "Выберите количество гостей",
-    nights: "ночь | ночи | ночей",
-    back: "Назад",
-    next: "Далее",
-    confirmAndBook: "Подтвердить и забронировать",
-    close: "Закрыть",
+
     confirmBookingDetails:
       "Пожалуйста, проверьте детали вашего бронирования перед подтверждением.",
     room: "Номер",
-    paymentText:
-      "Оплата производится в хостеле при заселении. Принимаем наличные и банковские карты.",
-    bookingConfirmedTitle: "Бронирование подтверждено!",
-    bookingConfirmedText:
-      "Спасибо за выбор Хостела 53! Подтверждение отправлено на вашу почту.",
+
     bookingError: "Ошибка бронирования. Пожалуйста, попробуйте снова.",
 
     // Home Page
@@ -390,12 +464,6 @@ const translations = {
     ctaSubtitle:
       "Забронируйте номер сейчас и испытайте лучшее гостеприимство в Бишкеке.",
 
-    // Booking Form
-    firstName: "Имя",
-    lastName: "Фамилия",
-    email: "Email",
-    specialRequests: "Особые пожелания",
-
     // Footer
     footerDescription: "Уют, комфорт и доступность в самом центре Бишкека.",
     quickLinks: "Быстрые ссылки",
@@ -403,7 +471,66 @@ const translations = {
     allRightsReserved: "Все права защищены.",
   },
 
-  ky: {
+  kg: {
+    ourRoomsSubtitle:
+      "Биздин жайлуу жана таза бөлмөлөрүбүздүн ичинен сизге ылайыктуусун тандаңыз.",
+    selectedBeds: "Тандалган орундар",
+    bed: "Орун",
+    termsAndConditions: "Мен ээлеп коюу шарттарына макулмун",
+    step1: "1-кадам: Даталар",
+    step2: "2-кадам: Орундарды тандоо",
+    step3: "3-кадам: Сиздин маалыматтар",
+    step4: "4-кадам: Ырастоо",
+    step5: "Бронирлөө ийгиликтүү!",
+    confirmAndBook: "Ырастоо жана брондоо",
+    confirmYourBookingTitle: "Бронированиеңизди ырастаңыз",
+    confirmYourBookingSubtitle:
+      "Ырастоодон мурун, бронирлөөңүздүн чоо-жайын текшериңиз.",
+    secureBooking: "Коопсуз бронирлөө",
+    selectYourDates: "Кирүү жана чыгуу күндөрүн тандаңыз",
+    topBunks: "Үстүнкү орундар",
+    bottomBunks: "Астыңкы орундар",
+    arrivalTime: "Келүү убактысы",
+    morning: "Эртең менен",
+    afternoon: "Түштөн кийин",
+    evening: "Кечинде",
+    late: "Кеч",
+    specialRequestsPlaceholder:
+      "Өзгөчө каалоолоруңуз барбы? Мисалы, тынч орун же бакчага көрүнүш.",
+    bookingTitle: "Бөлмөнү ээлөө",
+    bookingSubtitle: "Орунуңузду тез жана оңой брондоңуз",
+    selectDates: "Даталарды тандаңыз",
+    loadingBeds: "Бош орундарды издөөдө...",
+    errorFetchingBeds: "Орундарды жүктөөдө ката кетти. Кайра аракет кылыңыз.",
+    noBedsAvailable: "Бул күндөргө бош орун жок.",
+    maxGuestsReached: "Максималдуу орун саны ({count}) тандалды.",
+    available: "Бош",
+    booked: "Ээленген",
+    requiredField: "Милдеттүү талаа",
+    invalidEmail: "Электрондук почта дареги туура эмес",
+    agreeToTerms: "Сиз шарттарга макул болууңуз керек.",
+    total: "Жалпысы",
+    paymentText: "Сиздин төлөм маалыматыңыз коопсуз корголгон.",
+    bookingConfirmedTitle: "Бронирлөө ырасталды!",
+    bookingConfirmedText: "Ырастоо катын электрондук почтаңызга жөнөттүк.",
+    bookingReference: "Бронирлөөнүн номери",
+    downloadConfirmation: "Ырастоону жүктөп алуу",
+    shareBooking: "Бронирлөө менен бөлүшүү",
+    close: "Жабуу",
+    back: "Артка",
+    next: "Кийинки",
+    pleaseSelectValidDates: "Сураныч, туура күндөрдү тандаңыз.",
+    pleaseSelectAtLeastOneBed: "Сураныч, жок дегенде бир орун тандаңыз.",
+    pleaseSelectDatesFirst: "Сураныч, адегенде күндөрдү тандаңыз.",
+    firstName: "Аты",
+    lastName: "Фамилиясы",
+    email: "Email",
+    specialRequests: "Атайын суроо-талаптар",
+    nights: "түн | түндөр",
+    guest: "конок",
+    guests: "коноктор",
+    bookingCheckoutTitle: "Бөлмөнү ээлөө",
+    bookingCheckoutSubtitle: "Бөлмөнү ээлөө үчүн бардык кадамдарды толтуруңуз",
     // Navigation & Titles
     home: "Башкы бет",
     gallery: "Галерея",
@@ -418,11 +545,8 @@ const translations = {
     book: "Брондоо",
     bookNow: "Азыр брондоо",
     viewDetails: "Толугураак",
-    available: "Жеткиликтүү",
     perNight: "түнүнө",
     currency: "с",
-    guest: "конок",
-    guests: "Коноктор",
     guestForms: "конок | коноктор",
     support: "Колдоо",
     search: "Издөө",
@@ -452,7 +576,6 @@ const translations = {
     getOffer: "Арзандатуу алуу",
     viewAllRooms: "Бардык бөлмөлөрдү көрүү",
     processing: "Иштетүүдө...",
-    total: "Жалпы",
     free: "Акысыз",
     freeCancellation: "Келүүгө 24 саат калганда акысыз жокко чыгаруу",
     contactUs: "Биз менен байланышыңыз",
@@ -527,26 +650,6 @@ const translations = {
       "Биз сиздин жеке маалыматыңызды жоготуудан, уурдоодон, кыянаттык менен пайдалануудан жана уруксатсыз кирүүдөн, ачыкка чыгаруудан, өзгөртүүдөн жана жок кылуудан коргоого жардам берүү үчүн акылга сыярлык чараларды көрөбүз.",
 
     // Booking Flow
-    bookingTitle: "Бөлмөнү ээлөө",
-    bookingSubtitle: "Бөлмөнү ээлөө үчүн бардык кадамдарды толтуруңуз",
-    step1: "Даталар",
-    step2: "Маалымат",
-    step3: "Тастыктоо",
-    selectDates: "Даталарды тандаңыз",
-    selectGuests: "Коноктордун санын тандаңыз",
-    nights: "түн | түндөр",
-    back: "Артка",
-    next: "Андан ары",
-    confirmAndBook: "Тастыктоо жана ээлөө",
-    close: "Жабуу",
-    confirmBookingDetails:
-      "Тастыктоодон мурун ээлөө маалыматыңызды текшериңиз.",
-    room: "Бөлмө",
-    paymentText:
-      "Төлөм хостелге келгенде жүргүзүлөт. Накталай акча жана банк карталарын кабыл алабыз.",
-    bookingConfirmedTitle: "Брондоо ырасталды!",
-    bookingConfirmedText:
-      "Хостел 53 тандаганыңыз үчүн рахмат! Ырастоо сиздин электрондук почтаңызга жөнөтүлдү.",
     bookingError: "Ээлөөдө ката кетти. Кайталап көрүңүз.",
 
     // Home Page
@@ -591,12 +694,6 @@ const translations = {
     ctaSubtitle:
       "Азыр бөлмөңүздү брондоп, Бишкектеги эң мыкты меймандостукту сезиңиз.",
 
-    // Booking Form
-    firstName: "Аты",
-    lastName: "Фамилиясы",
-    email: "Email",
-    specialRequests: "Атайын суроо-талаптар",
-
     // Footer
     footerDescription:
       "Бишкектин борборунда жылуулук, ыңгайлуулук жана жеткиликтүүлүк.",
@@ -632,13 +729,12 @@ export const useTranslation = (language: Language) => {
     params?: Record<string, string | number>
   ): string => {
     let str = translations[language]?.[key] ?? translations.en[key] ?? key
+    const count = params?.count as number
 
-    if (
-      params?.count !== undefined &&
-      (key === "guestForms" || key === "nights")
-    ) {
+    if (count !== undefined && (key === "guestForms" || key === "nights")) {
       const forms = str.split(" | ")
-      str = pluralize(language, params.count as number, forms)
+      const pluralizedWord = pluralize(language, count, forms)
+      str = `${count} ${pluralizedWord}` // Исправлено: добавляем число перед словом
     }
 
     if (params) {
@@ -646,6 +742,7 @@ export const useTranslation = (language: Language) => {
         str = str.replace(`{${k}}`, String(v))
       })
     }
+
     return str
   }
 
