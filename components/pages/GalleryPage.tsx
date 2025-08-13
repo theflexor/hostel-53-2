@@ -8,6 +8,7 @@ import { ImageIcon, BedIcon, HomeIcon, TreesIcon, EyeIcon } from "lucide-react"
 import Image from "next/image"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { motion, AnimatePresence } from "framer-motion"
+import { heroKitchenImage, heroOutsideImage } from "@/public"
 const galleryImages = [
   {
     src: "https://images.unsplash.com/photo-1564326895812-701bb858d5f2?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // entrance
@@ -24,14 +25,14 @@ const galleryImages = [
     width: 600,
   },
   {
-    src: "https://i.pinimg.com/736x/db/9c/cd/db9ccd821d4dc5f513fe2b3fa6e8a706.jpg", // kitchen
+    src: heroKitchenImage, // kitchen
     title: "Common Kitchen",
     category: "interior",
     height: 800,
     width: 600,
   },
   {
-    src: "https://i.pinimg.com/1200x/fe/df/1e/fedf1ee8a6272a601c2ce2e5a29c4404.jpg", // courtyard
+    src: heroOutsideImage, // courtyard
     title: "Green Courtyard",
     category: "exterior",
     height: 400,

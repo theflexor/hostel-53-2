@@ -43,20 +43,21 @@ import Link from "next/link"
 import { mockRooms } from "@/lib/mockData"
 import { useLanguage } from "@/hooks/useLanguage"
 import { get } from "http"
+import { heroKitchenImage, heroMainImage, heroOutsideImage } from "@/public"
 
 const carouselImages = [
   {
-    src: "https://i.pinimg.com/1200x/97/28/fc/9728fc985a4bab0f28a81330055c9486.jpg",
+    src: heroMainImage,
     titleKey: "carouselTitle1",
     subtitleKey: "carouselSubtitle1",
   },
   {
-    src: "https://i.pinimg.com/1200x/e9/7c/fd/e97cfdc895c5138968be1df73519b87b.jpg",
+    src: heroKitchenImage,
     titleKey: "carouselTitle2",
     subtitleKey: "carouselSubtitle2",
   },
   {
-    src: "https://i.pinimg.com/736x/7d/1c/7c/7d1c7ce6661ff915ce2217f722a4c6f9.jpg",
+    src: heroOutsideImage,
     titleKey: "carouselTitle3",
     subtitleKey: "carouselSubtitle3",
   },

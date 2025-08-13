@@ -1,6 +1,6 @@
 import type { Bed, RawRoomData, Room } from "./types"
 
-const API_BASE_URL = "http://109.205.178.197:8080/api/v1"
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 type BookingPayload = {
   firstName: string
