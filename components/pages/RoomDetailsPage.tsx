@@ -32,6 +32,8 @@ interface RoomDetailsPageProps {
   room: Room
 }
 
+const staticUrl = process.env.NEXT_PUBLIC_STATIC_ASSETS_URL || ""
+
 export function RoomDetailsPage({ room }: RoomDetailsPageProps) {
   const { language } = useLanguage()
   const { t } = useTranslation(language)
@@ -107,7 +109,10 @@ export function RoomDetailsPage({ room }: RoomDetailsPageProps) {
             <Card className="overflow-hidden">
               <div className="relative h-96 md:h-[500px]">
                 <Image
-                  src={room.images[currentImageIndex] || "/placeholder.svg"}
+                  src={
+                    staticUrl + room.images[currentImageIndex] ||
+                    "/placeholder.svg"
+                  }
                   alt={`${room.name} - Image ${currentImageIndex + 1}`}
                   fill
                   objectFit="cover"

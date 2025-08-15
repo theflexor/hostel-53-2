@@ -25,6 +25,9 @@ interface RoomCardProps {
   room: Room
 }
 
+
+const staticUrl = process.env.NEXT_PUBLIC_STATIC_ASSETS_URL || ""
+
 export function RoomCard({ room }: RoomCardProps) {
   const { language } = useLanguage()
   const { t } = useTranslation(language)
@@ -63,7 +66,7 @@ export function RoomCard({ room }: RoomCardProps) {
       <Link href={`/rooms/${room.id}`} className="block">
         <div className="relative h-48 sm:h-64 overflow-hidden">
           <Image
-            src={room.images[currentImageIndex] || "/placeholder.svg"}
+            src={staticUrl + room.images[currentImageIndex] || "/placeholder.svg"}
             alt={room.name}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-110"

@@ -46,6 +46,8 @@ interface BookingFlowProps {
   children: React.ReactNode
 }
 
+const staticUrl = process.env.NEXT_PUBLIC_STATIC_ASSETS_URL || ""
+
 export function BookingFlow({ room, children }: BookingFlowProps) {
   const { language } = useLanguage()
   const { t } = useTranslation(language)
@@ -327,7 +329,7 @@ export function BookingFlow({ room, children }: BookingFlowProps) {
           <div className="hidden sm:block w-1/3 bg-gray-50 p-6 border-r">
             <div className="sticky top-6">
               <Image
-                src={room.images[0] || "/placeholder.svg"}
+                src={staticUrl + room.images[0] || "/placeholder.svg"}
                 alt={room.name}
                 width={200}
                 height={150}
