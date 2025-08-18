@@ -49,6 +49,7 @@ import { cn } from "@/lib/utils"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { useBeds } from "@/hooks/useBeds"
+import { useRouter } from "next/navigation"
 
 export interface Bed {
   id: number
@@ -129,6 +130,7 @@ const staggerItem = {
 }
 
 export function BookingPage({ room, onClose }: BookingPageProps) {
+  const router = useRouter() // ADDED: Initialize the router for navigation
   const { language } = useLanguage()
   const { t } = useTranslation(language)
   const createBooking = useCreateBooking()
@@ -1522,7 +1524,10 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      <Button onClick={onClose} className="h-12 px-8">
+                      <Button
+                        onClick={() => router.push("/rooms/2")}
+                        className="h-12 px-8"
+                      >
                         {t("close")}
                       </Button>
                     </motion.div>
