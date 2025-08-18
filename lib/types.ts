@@ -22,6 +22,10 @@ export interface Bed {
   tier: "BOTTOM" | "TOP"
   roomId: number
   available: boolean
+  bookedPeriods: {
+    start: string
+    end: string
+  }[]
 }
 
 // This represents the raw data structure from the API

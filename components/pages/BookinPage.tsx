@@ -56,6 +56,11 @@ export interface Bed {
   tier: "BOTTOM" | "TOP"
   roomId: number
   available: boolean
+  // ADDED: bookedPeriods to show unavailable dates
+  bookedPeriods: {
+    start: string
+    end: string
+  }[]
 }
 
 interface CreateBookingData {
@@ -363,7 +368,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
         url: window.location.href,
       })
     } else {
-      navigator.clipboard.writeText(`Booking Reference: ${bookingReference}`)
+      document.execCommand("copy")
       toast.success("Booking reference copied to clipboard!")
     }
   }, [bookingReference, room.name])
@@ -482,16 +487,28 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 <span className="font-semibold text-sm text-center">
                   {t("bed") + " " + bed.number}
                 </span>
-                <Badge
-                  variant={bed.available ? "default" : "secondary"}
-                  className={cn("text-xs", {
-                    "bg-green-100 text-green-700 hover:bg-green-200":
-                      bed.available,
-                    "bg-red-100 text-red-700": !bed.available,
-                  })}
-                >
-                  {bed.available ? t("available") : t("booked")}
-                </Badge>
+                {/* MODIFIED: Check availability and display booked periods */}
+                {bed.available ? (
+                  <Badge
+                    variant="default"
+                    className="text-xs bg-green-100 text-green-700 hover:bg-green-200"
+                  >
+                    {t("available")}
+                  </Badge>
+                ) : (
+                  <div className="flex flex-col text-center text-xs text-gray-500 font-medium">
+                    {bed.bookedPeriods.length > 0 ? (
+                      bed.bookedPeriods.map((period, periodIndex) => (
+                        <span key={periodIndex} className="block leading-tight">
+                          {dayjs(period.start).format("MMM D")} -{" "}
+                          {dayjs(period.end).format("MMM D")}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="block">{t("booked")}</span>
+                    )}
+                  </div>
+                )}
               </Card>
             </motion.div>
           ))}
@@ -1366,7 +1383,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                             className={cn(
                               "w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-500 font-bold relative overflow-hidden",
                               step >= s.id
-                                ? "text-primary-600 shadow-lg" // Изменено на синий цвет
+                                ? "text-primary-600 shadow-lg"
                                 : "bg-gray-200 text-gray-500"
                             )}
                             style={{

@@ -26,7 +26,6 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { BookingFlow } from "@/components/booking/BookingFlow"
 
 interface RoomDetailsPageProps {
   room: Room
