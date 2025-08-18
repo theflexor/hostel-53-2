@@ -1,7 +1,7 @@
 "use client"
 
 import dayjs from "dayjs"
-import React, { useState, useMemo, useEffect, useCallback } from "react"
+import React, { useState, useMemo, useEffect, useCallback, useRef } from "react" // UPDATED: Added useRef
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { DateRangePicker } from "@/components/DateRangePicker"
@@ -131,6 +131,7 @@ const staggerItem = {
 
 export function BookingPage({ room, onClose }: BookingPageProps) {
   const router = useRouter() // ADDED: Initialize the router for navigation
+  const pageTopRef = useRef(null) // ADDED: Ref to scroll to the top of the page
   const { language } = useLanguage()
   const { t } = useTranslation(language)
   const createBooking = useCreateBooking()
@@ -188,6 +189,13 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
   useEffect(() => {
     setFormData((prev) => ({ ...prev, selectedBedIds: [] }))
   }, [formData.checkIn, formData.checkOut])
+
+  // ADDED: Smooth scroll to the top of the content area when the step changes
+  useEffect(() => {
+    if (pageTopRef.current) {
+      pageTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+  }, [step])
 
   const handleDateChange = useCallback(
     (range: { from?: string; to?: string }) => {
@@ -1232,7 +1240,12 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
         </div>
       </motion.div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div
+        ref={pageTopRef}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+      >
+        {" "}
+        {/* UPDATED: Added ref here */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <motion.div
             className="lg:col-span-1"
