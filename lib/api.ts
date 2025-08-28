@@ -1,4 +1,4 @@
-import type { Bed, RawRoomData, Room } from "./types"
+import type { Bed, CalculateResponse, RawRoomData, Room } from "./types"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
@@ -118,4 +118,35 @@ export async function bookBeds(payload: BookingPayload): Promise<void> {
   }
 
   console.log("Booking created successfully")
+}
+
+export async function calculatePrice(
+  categoryId: number,
+  bedsCount: number,
+  guestsCount: number,
+  checkInDate: string,
+  checkOutDate: string
+): Promise<CalculateResponse> {
+  const checkInDatelocal = new Date(checkInDate).toISOString().split("T")[0]
+  const checkOutDatelocal = new Date(checkOutDate).toISOString().split("T")[0]
+
+  const response = await fetch(
+    `${API_BASE_URL}/bookings/calculate-price?categoryId=${categoryId}&bedsCount=${bedsCount}&guestsCount=${guestsCount}&checkInDate=${checkInDatelocal}&checkOutDate=${checkOutDatelocal}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    console.error("Failed to calculate price:", errorText)
+    // Бросаем ошибку с текстом ответа сервера
+    throw new Error(`Price calculation failed: ${errorText}`)
+  }
+
+  const data = await response.json()
+  return data
 }

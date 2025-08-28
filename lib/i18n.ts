@@ -2,7 +2,18 @@ import type { Language } from "@/hooks/useLanguage"
 
 const translations = {
   en: {
+    ourRoomsTitle: "ourRoomsTitle",
+    check_in: "Check In",
+    check_out: "Check Out",
+    fixed_check_in_out_time: "Check-in and check-out times are fixed",
+    form_header: "Your Information",
+    subtitle: "Please provide your contact details",
+    firstName_placeholder: "Enter your first name",
+    lastName_placeholder: "Enter your last name",
+    email_placeholder: "Enter your email address",
+    phone_placeholder: "Enter your phone number",
     // Navigation & Titles
+    currency: "KGS",
     home: "Home",
     gallery: "Gallery",
     about: "About",
@@ -73,7 +84,6 @@ const translations = {
     bookNow: "Book Now",
     viewDetails: "Details",
     perNight: "per night",
-    currency: "s",
     guestForms: "guest | guests",
     support: "Support",
     search: "Search",
@@ -236,6 +246,18 @@ const translations = {
   },
 
   ru: {
+    ourRoomsTitle: "Наши номера",
+    check_in: "Заселение",
+    check_out: "Выселение",
+    fixed_check_in_out_time: "Время заселения и выселения фиксированное",
+    form_header: "Ваша информация",
+    subtitle: "Пожалуйста, предоставьте свои контактные данные",
+    firstName_placeholder: "Введите ваше имя",
+    lastName_placeholder: "Введите вашу фамилию",
+    email_placeholder: "Введите ваш адрес электронной почты",
+    phone_placeholder: "Введите ваш номер телефона",
+    ///
+    currency: "С",
     ourRoomsSubtitle:
       "Выберите номер, который подходит именно вам, из нашего широкого выбора уютных и чистых комнат.",
     selectedBeds: "Выбрано коек",
@@ -311,7 +333,6 @@ const translations = {
     bookNow: "Забронировать",
     viewDetails: "Подробнее",
     perNight: "за ночь",
-    currency: "с",
     guestForms: "гость | гостя | гостей",
     support: "Поддержка",
     search: "Поиск",
@@ -446,7 +467,7 @@ const translations = {
     offerTitle2: "Скидка студентам",
     offerDesc2: "Покажите студенческий билет и получите скидку 10%.",
     offerTitle3: "Групповое бронирование",
-    offerDesc3: "Бронируйте для 5+ человек со скидкой 20%.",
+    offerDesc3: "Бронируйте для 4+ человек со скидкой 40%.",
     whatWeProvideTitle: "Что мы предоставляем",
     provideTitle1: "Удобные кровати",
     provideDesc1: "Качественные матрасы и свежее белье.",
@@ -471,7 +492,18 @@ const translations = {
     allRightsReserved: "Все права защищены.",
   },
 
-  kg: {
+  ky: {
+    ourRoomsTitle: "Биздин бөлмөлөр",
+    check_in: "Каттоо",
+    check_out: "Чыгуу",
+    fixed_check_in_out_time: "Каттоо жана чыгуу убактысы белгиленген",
+    form_header: "Сиздин маалымат",
+    subtitle: "Сураныч, байланыш маалыматыңызды бериңиз",
+    firstName_placeholder: "Атыңызды киргизиңиз",
+    lastName_placeholder: "Фамилияңызды киргизиңиз",
+    email_placeholder: "Электрондук почтаңыздын дарегин киргизиңиз",
+    phone_placeholder: "Телефон номериңизди киргизиңиз",
+    currency: "С",
     ourRoomsSubtitle:
       "Биздин жайлуу жана таза бөлмөлөрүбүздүн ичинен сизге ылайыктуусун тандаңыз.",
     selectedBeds: "Тандалган орундар",
@@ -546,7 +578,6 @@ const translations = {
     bookNow: "Азыр брондоо",
     viewDetails: "Толугураак",
     perNight: "түнүнө",
-    currency: "с",
     guestForms: "конок | коноктор",
     support: "Колдоо",
     search: "Издөө",
@@ -728,6 +759,7 @@ export const useTranslation = (language: Language) => {
     key: keyof typeof translations.en,
     params?: Record<string, string | number>
   ): string => {
+    console.log(language)
     let str = translations[language]?.[key] ?? translations.en[key] ?? key
     const count = params?.count as number
 

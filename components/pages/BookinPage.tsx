@@ -1,13 +1,13 @@
 "use client"
 
 import dayjs from "dayjs"
-import React, { useState, useMemo, useEffect, useCallback, useRef } from "react" // UPDATED: Added useRef
+import React, { useState, useMemo, useEffect, useCallback, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { DateRangePicker } from "@/components/DateRangePicker"
 import { useLanguage } from "@/hooks/useLanguage"
 import { useTranslation } from "@/lib/i18n"
-import { useCreateBooking } from "@/hooks/useBookings"
+import { useCalculatePrice, useCreateBooking } from "@/hooks/useBookings"
 import type { Room } from "@/lib/types"
 import {
   ArrowLeft,
@@ -38,18 +38,12 @@ import Image from "next/image"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { useBeds } from "@/hooks/useBeds"
 import { useRouter } from "next/navigation"
+// ДОБАВЛЕНО: Импортируем хук для расчета цены
 
 export interface Bed {
   id: number
@@ -57,7 +51,6 @@ export interface Bed {
   tier: "BOTTOM" | "TOP"
   roomId: number
   available: boolean
-  // ADDED: bookedPeriods to show unavailable dates
   bookedPeriods: {
     start: string
     end: string
@@ -129,23 +122,29 @@ const staggerItem = {
   animate: { opacity: 1, y: 0 },
 }
 
+// const discountData = {
+//   originalPrice: 35000.0,
+//   discountedPrice: 21000.0,
+//   discountAmount: 14000.0,
+//   discountPercentage: 40,
+// }
+
+// const hasDiscount = discountData.discountPercentage > 0
+
 export function BookingPage({ room, onClose }: BookingPageProps) {
-  const router = useRouter() // ADDED: Initialize the router for navigation
-  const pageTopRef = useRef(null) // ADDED: Ref to scroll to the top of the page
+  const router = useRouter()
+  const pageTopRef = useRef(null)
   const { language } = useLanguage()
   const { t } = useTranslation(language)
   const createBooking = useCreateBooking()
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
-    checkIn: "",
-    checkOut: "",
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
     selectedBedIds: [] as number[],
     specialRequests: "",
-    arrivalTime: "",
   })
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
   const [agreedToTerms, setAgreedToTerms] = useState(false)
@@ -170,32 +169,71 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
     const diff = checkOut.diff(checkIn, "day")
     return diff > 0 ? diff : 0
   }, [formData.checkIn, formData.checkOut])
-  console.log("nights", nights)
 
-  const totalPrice = useMemo(() => {
-    if (nights === 0 || formData.selectedBedIds.length === 0) return 0
-    return nights * room.price * formData.selectedBedIds.length
-  }, [nights, room.price, formData.selectedBedIds.length])
+  // ДОБАВЛЕНО: Вызываем хук для получения цены с бэкенда
+  const {
+    data: serverCalculatedPrice,
+    isLoading: isPriceLoading,
+    error: priceError,
+  } = useCalculatePrice(
+    room.id,
+    formData.selectedBedIds,
+    formData.checkIn,
+    formData.checkOut
+  )
 
+  console.log(serverCalculatedPrice)
+
+  const discountData = serverCalculatedPrice || {
+    originalPrice: 0,
+    discountedPrice: 0,
+    discountAmount: 0,
+    discountPercentage: 0,
+  }
+
+  const hasDiscount = discountData.discountPercentage > 0
+  const totalPrice = hasDiscount
+    ? discountData.discountedPrice
+    : discountData.originalPrice || 0
+
+  // ИЗМЕНЕНО: Теперь totalPrice берется из хука, а не вычисляется на клиенте
+  // const totalPrice = serverCalculatedPrice ?? 0
+
+  // Этот useMemo оставляем, так как форматирование все еще нужно
   const formattedTotalPrice = useMemo(() => {
+    const priceToFormat = hasDiscount
+      ? discountData.discountedPrice
+      : totalPrice
     return new Intl.NumberFormat(language === "en" ? "en-US" : "ru-RU", {
-      style: "currency",
-      currency: "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(totalPrice)
-  }, [totalPrice, language])
+    }).format(priceToFormat)
+  }, [totalPrice, discountData, hasDiscount, language])
 
   useEffect(() => {
     setFormData((prev) => ({ ...prev, selectedBedIds: [] }))
   }, [formData.checkIn, formData.checkOut])
 
-  // ADDED: Smooth scroll to the top of the content area when the step changes
   useEffect(() => {
     if (pageTopRef.current) {
       pageTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
     }
   }, [step])
+
+  useEffect(() => {
+    // Trigger price calculation immediately when beds or dates change
+    if (
+      formData.selectedBedIds.length > 0 &&
+      formData.checkIn &&
+      formData.checkOut
+    ) {
+      console.log("[v0] Triggering price calculation for:", {
+        bedIds: formData.selectedBedIds,
+        checkIn: formData.checkIn,
+        checkOut: formData.checkOut,
+      })
+    }
+  }, [formData.selectedBedIds, formData.checkIn, formData.checkOut])
 
   const handleDateChange = useCallback(
     (range: { from?: string; to?: string }) => {
@@ -399,6 +437,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
   ]
 
   const renderBedCards = (bedType: "TOP" | "BOTTOM") => {
+    // ... остальной код renderBedCards без изменений
     const filteredBeds = beds.filter((bed) => bed.tier === bedType)
     if (filteredBeds.length === 0) {
       return null
@@ -497,7 +536,6 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 <span className="font-semibold text-sm text-center">
                   {t("bed") + " " + bed.number}
                 </span>
-                {/* MODIFIED: Check availability and display booked periods */}
                 {bed.available ? (
                   <Badge
                     variant="default"
@@ -531,6 +569,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
     switch (step) {
       case 1:
         return (
+          // ... без изменений
           <motion.div
             key={1}
             variants={stepVariants}
@@ -546,11 +585,9 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               transition={{ delay: 0.2 }}
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                Choose Your Dates
+                {t("selectDates")}
               </h2>
-              <p className="text-gray-600">
-                Select your check-in and check-out dates
-              </p>
+              <p className="text-gray-600">{t("selectYourDates")}</p>
             </motion.div>
 
             <motion.div
@@ -569,29 +606,82 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                   to: formData.checkOut,
                 }}
               />
+
+              <div className="mt-6 rounded-xl p-6 ">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="flex items-center justify-center mb-2">
+                      <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
+                        <svg
+                          className="w-5 h-5 text-primary-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">
+                      {t("check_in")}
+                    </h3>
+                    <p className="text-2xl font-bold text-primary-500">14:00</p>
+                  </div>
+
+                  <div className="text-center">
+                    <div className="flex items-center justify-center mb-2">
+                      <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                        <svg
+                          className="w-5 h-5 text-red-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">
+                      {t("check_out")}
+                    </h3>
+                    <p className="text-2xl font-bold text-red-500">12:00</p>
+                  </div>
+                </div>
+                <div className="mt-4 pt-4 border-t ">
+                  <div className="flex items-center justify-center text-sm text-gray-600">
+                    <svg
+                      className="w-4 h-4 mr-2 text-blue-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    {t("fixed_check_in_out_time")}
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         )
       case 2:
-        if (!shouldFetchBeds) {
-          return (
-            <motion.div
-              key="no-dates-selected"
-              className="text-center py-12 flex flex-col items-center justify-center"
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={stepVariants}
-            >
-              <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600 font-medium">
-                {t("pleaseSelectDatesFirst")}
-              </p>
-            </motion.div>
-          )
-        }
-
         return (
+          // ... без изменений
           <motion.div
             key={2}
             variants={stepVariants}
@@ -625,7 +715,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                     animate={{ rotate: 360 }}
                     transition={{
                       duration: 1,
-                      repeat: Infinity,
+                      repeat: Number.POSITIVE_INFINITY,
                       ease: "linear",
                     }}
                   >
@@ -685,6 +775,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
         )
       case 3:
         return (
+          // ... без изменений
           <motion.div
             key={3}
             variants={stepVariants}
@@ -700,11 +791,9 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               transition={{ delay: 0.2 }}
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                Your Information
+                {t("form_header")}
               </h2>
-              <p className="text-gray-600">
-                Please provide your contact details
-              </p>
+              <p className="text-gray-600">{t("subtitle")}</p>
             </motion.div>
 
             <motion.div
@@ -736,7 +825,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                       formErrors.firstName &&
                         "border-red-500 focus:border-red-500"
                     )}
-                    placeholder="Enter your first name"
+                    placeholder={t("firstName_placeholder")}
                   />
                   {formErrors.firstName && (
                     <motion.p
@@ -767,7 +856,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                       formErrors.lastName &&
                         "border-red-500 focus:border-red-500"
                     )}
-                    placeholder="Enter your last name"
+                    placeholder={t("lastName_placeholder")}
                   />
                   {formErrors.lastName && (
                     <motion.p
@@ -804,7 +893,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                       "h-12 transition-all duration-200",
                       formErrors.email && "border-red-500 focus:border-red-500"
                     )}
-                    placeholder="Enter your email address"
+                    placeholder={t("email_placeholder")}
                   />
                   {formErrors.email && (
                     <motion.p
@@ -835,7 +924,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                       "h-12 transition-all duration-200",
                       formErrors.phone && "border-red-500 focus:border-red-500"
                     )}
-                    placeholder="Enter your phone number"
+                    placeholder={t("phone_placeholder")}
                   />
                   {formErrors.phone && (
                     <motion.p
@@ -847,29 +936,6 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                     </motion.p>
                   )}
                 </motion.div>
-              </motion.div>
-
-              <motion.div variants={staggerItem}>
-                <Label htmlFor="arrivalTime" className="mb-2 block font-medium">
-                  <Clock className="w-4 h-4 inline mr-2" />
-                  {t("arrivalTime")}
-                </Label>
-                <Select
-                  value={formData.arrivalTime}
-                  onValueChange={(value) =>
-                    setFormData((prev) => ({ ...prev, arrivalTime: value }))
-                  }
-                >
-                  <SelectTrigger className="h-12">
-                    <SelectValue placeholder={t("selectArrivalTime")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="morning">{t("morning")}</SelectItem>
-                    <SelectItem value="afternoon">{t("afternoon")}</SelectItem>
-                    <SelectItem value="evening">{t("evening")}</SelectItem>
-                    <SelectItem value="late">{t("late")}</SelectItem>
-                  </SelectContent>
-                </Select>
               </motion.div>
 
               <motion.div variants={staggerItem}>
@@ -931,6 +997,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 whileHover={{ scale: 1.01 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
+                {/* ... (детали бронирования без изменений) */}
                 <div className="flex justify-between items-center py-2 border-b border-gray-200">
                   <span className="text-gray-600 font-medium">{t("room")}</span>
                   <span className="font-semibold text-gray-800">
@@ -970,26 +1037,94 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                   </span>
                 </div>
                 <motion.div
-                  className="flex justify-between items-center py-3 border-t-2 border-gray-300 mt-4"
-                  initial={{ scale: 0.95 }}
+                  className="flex justify-between items-end space-y-2"
+                  initial={{ scale: 0.8 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.6 }}
                 >
                   <span className="font-bold text-xl">{t("total")}</span>
-                  <motion.span
-                    className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent"
-                    key={totalPrice}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 500,
-                      damping: 30,
-                      delay: 0.8,
-                    }}
-                  >
-                    {formattedTotalPrice}
-                  </motion.span>
+
+                  {hasDiscount && (
+                    <motion.div
+                      className="flex flex-col items-end space-y-1"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <motion.span
+                          className="text-sm line-through text-gray-500"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.5 }}
+                        >
+                          {new Intl.NumberFormat("ru-RU", {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          }).format(discountData.originalPrice) +
+                            " " +
+                            t("currency")}
+                        </motion.span>
+                        <motion.div
+                          className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold"
+                          initial={{ scale: 0, rotate: -10 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 25,
+                            delay: 0.6,
+                          }}
+                        >
+                          -{discountData.discountPercentage}%
+                        </motion.div>
+                      </div>
+                      <motion.div
+                        className="text-sm text-green-600 font-semibold"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.7 }}
+                      >
+                        Экономия:{" "}
+                        {new Intl.NumberFormat("ru-RU", {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
+                        }).format(discountData.discountAmount) +
+                          " " +
+                          t("currency")}
+                      </motion.div>
+                    </motion.div>
+                  )}
+
+                  {/* ИЗМЕНЕНО: Добавлена проверка на загрузку цены */}
+                  <div className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent">
+                    {isPriceLoading ? (
+                      <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+                    ) : (
+                      <motion.span
+                        key={
+                          hasDiscount
+                            ? discountData.discountedPrice
+                            : totalPrice
+                        }
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 500,
+                          damping: 30,
+                          delay: 0.2,
+                        }}
+                      >
+                        {hasDiscount
+                          ? new Intl.NumberFormat("ru-RU", {
+                              style: "currency",
+                              currency: "RUB",
+                            }).format(discountData.discountedPrice)
+                          : formattedTotalPrice}
+                      </motion.span>
+                    )}
+                  </div>
                 </motion.div>
               </motion.div>
 
@@ -1046,6 +1181,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
         )
       case 5:
         return (
+          // ... без изменений
           <motion.div
             key={5}
             className="text-center py-12 flex flex-col items-center justify-center"
@@ -1153,7 +1289,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 <Button
                   onClick={downloadConfirmation}
                   variant="outline"
-                  className="flex-1 h-12 border-2"
+                  className="flex-1 h-12 border-2 bg-transparent"
                 >
                   <Download className="w-4 h-4 mr-2" />
                   {t("downloadConfirmation")}
@@ -1166,7 +1302,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 <Button
                   onClick={shareBooking}
                   variant="outline"
-                  className="flex-1 h-12 border-2"
+                  className="flex-1 h-12 border-2 bg-transparent"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
                   {t("shareBooking")}
@@ -1181,6 +1317,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
   }
 
   const isNextDisabled = () => {
+    // ... без изменений
     if (step === 1)
       return !formData.checkIn || !formData.checkOut || nights <= 0
     if (step === 2) return formData.selectedBedIds.length === 0
@@ -1188,7 +1325,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
       const [isValid] = validateCurrentStepFields()
       return !isValid
     }
-    if (step === 4) return !agreedToTerms
+    if (step === 4) return !agreedToTerms || isPriceLoading // ИЗМЕНЕНО: Блокируем кнопку, пока цена грузится
     return false
   }
 
@@ -1200,6 +1337,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
       animate="animate"
       exit="exit"
     >
+      {/* ... (Header без изменений) */}
       <motion.div
         className="bg-white border-b border-gray-200 sticky top-0 z-10 backdrop-blur-sm bg-white/95"
         initial={{ y: -100 }}
@@ -1244,8 +1382,6 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
         ref={pageTopRef}
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
       >
-        {" "}
-        {/* UPDATED: Added ref here */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <motion.div
             className="lg:col-span-1"
@@ -1260,6 +1396,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               animate="animate"
               whileHover="hover"
             >
+              {/* ... (Карточка с информацией о комнате без изменений) */}
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -1267,7 +1404,10 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 <Image
                   src={
                     room.images[0] ||
-                    "/placeholder.svg?height=200&width=300&query=room interior"
+                    "/placeholder.svg?height=200&width=300&query=room interior" ||
+                    "/placeholder.svg" ||
+                    "/placeholder.svg" ||
+                    "/placeholder.svg"
                   }
                   alt={room.name}
                   width={300}
@@ -1348,24 +1488,84 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1 }}
               >
-                <div className="flex justify-between items-center">
+                <motion.div
+                  className="flex justify-between items-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                >
                   <span className="font-semibold text-gray-800">
                     {t("total")}
                   </span>
-                  <motion.span
-                    className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent"
-                    key={totalPrice}
-                    initial={{ scale: 0.8 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  >
-                    {formattedTotalPrice}
-                  </motion.span>
-                </div>
+
+                  <div className="flex flex-col items-end">
+                    {hasDiscount && (
+                      <motion.div
+                        className="flex items-center space-x-2 mb-1"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 }}
+                      >
+                        <span className="text-xs line-through text-gray-400">
+                          {new Intl.NumberFormat("ru-RU", {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          }).format(discountData.originalPrice) +
+                            " " +
+                            t("currency")}
+                        </span>
+                        <motion.span
+                          className="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded font-bold"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            delay: 0.4,
+                          }}
+                        >
+                          -{discountData.discountPercentage}%
+                        </motion.span>
+                      </motion.div>
+                    )}
+
+                    {/* ИЗМЕНЕНО: Добавлена проверка на загрузку цены */}
+                    <div className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent">
+                      {isPriceLoading ? (
+                        <Loader2 className="w-6 h-6 animate-spin text-primary-600" />
+                      ) : (
+                        <motion.span
+                          key={
+                            hasDiscount
+                              ? discountData.discountedPrice
+                              : totalPrice
+                          }
+                          initial={{ scale: 0.8 }}
+                          animate={{ scale: 1 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 30,
+                          }}
+                        >
+                          {hasDiscount
+                            ? new Intl.NumberFormat("ru-RU", {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0,
+                              }).format(discountData.discountedPrice) +
+                              " " +
+                              t("currency")
+                            : formattedTotalPrice}
+                        </motion.span>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
               </motion.div>
             </motion.div>
           </motion.div>
 
+          {/* ... (Правая колонка с шагами) */}
           <motion.div
             className="lg:col-span-3"
             initial={{ opacity: 0, x: 50 }}
@@ -1378,6 +1578,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               initial="initial"
               animate="animate"
             >
+              {/* ... (Шаги 1, 2, 3, 5 без изменений) */}
               {step < 5 && (
                 <motion.div
                   className="p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100"
@@ -1398,13 +1599,16 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                             className={cn(
                               "w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-500 font-bold relative overflow-hidden",
                               step >= s.id
-                                ? "text-primary-600 shadow-lg"
+                                ? "bg-primary-500 text-white" // Changed to white for better contrast with color background
                                 : "bg-gray-200 text-gray-500"
                             )}
                             style={{
                               background:
                                 step >= s.id
-                                  ? `linear-gradient(135deg, ${s.color}, ${s.color}dd)`
+                                  ? `linear-gradient(135deg, ${s.color.replace(
+                                      "bg-",
+                                      ""
+                                    )}, ${s.color.replace("bg-", "")}dd)`
                                   : undefined,
                             }}
                             whileHover={{ scale: 1.1 }}
@@ -1426,15 +1630,18 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                                 <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                               </motion.div>
                             ) : (
-                              <s.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                              <s.icon
+                                className={cn(
+                                  "w-4 h-4 sm:w-5 sm:h-5",
+                                  step >= s.id ? "text-white" : ""
+                                )}
+                              />
                             )}
                           </motion.div>
                           <span
                             className={cn(
                               "text-[10px] sm:text-sm font-medium text-center transition-colors duration-300",
-                              step >= s.id
-                                ? "text-primary-600"
-                                : "text-gray-500",
+                              step >= s.id ? "text-gray-800" : "text-gray-500",
                               "hidden sm:block"
                             )}
                           >
@@ -1443,7 +1650,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                         </motion.div>
                         {index < stepsConfig.length - 1 && (
                           <motion.div
-                            className="flex-1 h-0.5 mx-2 sm:mx-4 mt-5 bg-gray-200 relative overflow-hidden"
+                            className="flex-1 h-0.5 -mx-2 sm:-mx-4 mt-[-2rem] bg-gray-200 relative overflow-hidden"
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: 1 }}
                             transition={{
@@ -1465,6 +1672,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                   </div>
                 </motion.div>
               )}
+
               <div className="p-6 min-h-[500px]">
                 <AnimatePresence mode="wait">
                   {renderStepContent()}
@@ -1487,7 +1695,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                         variant="outline"
                         onClick={handlePrevStep}
                         disabled={step === 1}
-                        className="h-12 px-8 border-2"
+                        className="h-12 px-8 border-2 bg-transparent"
                       >
                         <ArrowLeft className="w-4 h-4 mr-2" /> {t("back")}
                       </Button>
@@ -1500,6 +1708,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                         <Button
                           onClick={handleNextStep}
                           disabled={isNextDisabled()}
+                          className="h-12 px-8"
                         >
                           {t("next")} <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
@@ -1519,7 +1728,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                               animate={{ rotate: 360 }}
                               transition={{
                                 duration: 1,
-                                repeat: Infinity,
+                                repeat: Number.POSITIVE_INFINITY,
                                 ease: "linear",
                               }}
                             >
@@ -1538,7 +1747,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                       whileTap={{ scale: 0.95 }}
                     >
                       <Button
-                        onClick={() => router.push("/rooms/2")}
+                        onClick={() => router.push("/")}
                         className="h-12 px-8"
                       >
                         {t("close")}

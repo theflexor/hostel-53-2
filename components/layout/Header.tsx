@@ -83,15 +83,6 @@ export function Header() {
 
           <div className="hidden lg:flex items-center gap-4">
             <LanguageSwitcher />
-            <Button
-              asChild
-              className="bg-primary-gradient hover:shadow-lg text-white rounded-xl px-5 py-2.5"
-            >
-              <Link href="/#booking">
-                <BedIcon className="h-4 w-4 mr-2" />
-                {t("book")}
-              </Link>
-            </Button>
           </div>
 
           {/* Mobile Menu Button */}

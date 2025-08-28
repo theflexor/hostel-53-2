@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { BookingData, CreateBookingData } from "@/lib/types"
-import { bookBeds } from "@/lib/api"
+import { bookBeds, calculatePrice } from "@/lib/api"
 
 // Mock function for development
 const saveMockBooking = async (
@@ -159,5 +159,39 @@ export const useBookingStats = () => {
       }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
+
+export const useCalculatePrice = (
+  roomId: number,
+  bedIds: number[],
+  checkIn: string,
+  checkOut: string
+) => {
+  // Вызываем useQuery на верхнем уровне хука
+  return useQuery({
+    queryKey: ["calculate-price", roomId, bedIds, checkIn, checkOut],
+    queryFn: async () => {
+      // guestsCount можно получить из длины массива bedIds
+      const bedsCount = bedIds.length
+      if (bedsCount === 0) {
+        return null // Не делаем запрос, если не выбраны кровати
+      }
+
+      const totalPrice = await calculatePrice(
+        roomId,
+        bedsCount,
+        bedsCount, // Предполагаем, что каждый гость занимает одну кровать
+        checkIn,
+        checkOut
+      )
+
+      console.log(totalPrice)
+
+      return totalPrice
+    },
+    // Запрос будет активен только когда все данные есть и выбрана хотя бы одна кровать
+    enabled: !!(roomId && bedIds.length > 0 && checkIn && checkOut),
+    staleTime: 5 * 60 * 1000, // 5 минут
   })
 }

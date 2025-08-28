@@ -112,3 +112,10 @@ export interface ApiError {
   code?: string
   details?: any
 }
+
+export interface CalculateResponse {
+  originalPrice: number
+  discountedPrice: number
+  discountAmount: number
+  discountPercentage: number
+}
