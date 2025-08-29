@@ -2,6 +2,8 @@ import type { Language } from "@/hooks/useLanguage"
 
 const translations = {
   en: {
+    selectBeds: "Select Your Beds",
+    selectBedsSubtitle: "Choose from available beds for your stay",
     ecconomy: "Economy",
     ourRoomsTitle: "ourRoomsTitle",
     check_in: "Check In",
@@ -247,6 +249,8 @@ const translations = {
   },
 
   ru: {
+    selectBeds: "Выберите ваши койки",
+    selectBedsSubtitle: "Выберите из доступных коек для вашего пребывания",
     ecconomy: "Экономия",
     ourRoomsTitle: "Наши номера",
     check_in: "Заселение",
@@ -495,6 +499,8 @@ const translations = {
   },
 
   ky: {
+    selectBeds: "Орундарыңызды тандаңыз",
+    selectBedsSubtitle: "Сиздин эс алууңуз үчүн бош орундардан тандаңыз",
     ecconomy: "Экономия",
     ourRoomsTitle: "Биздин бөлмөлөр",
     check_in: "Каттоо",

@@ -695,11 +695,9 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               transition={{ delay: 0.2 }}
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                Select Your Beds
+                {t("selectBeds")}
               </h2>
-              <p className="text-gray-600">
-                Choose from available beds for your stay
-              </p>
+              <p className="text-gray-600">{t("selectBedsSubtitle")}</p>
             </motion.div>
 
             {isLoadingBeds ? (
@@ -1609,7 +1607,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                               }).format(discountData.discountedPrice) +
                               " " +
                               t("currency")
-                            : formattedTotalPrice}
+                            : formattedTotalPrice + " " + t("currency")}
                         </motion.span>
                       )}
                     </div>
