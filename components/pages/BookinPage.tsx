@@ -20,7 +20,6 @@ import {
   BedIcon,
   Download,
   Share2,
-  Clock,
   MessageSquare,
   X,
   Star,
@@ -371,7 +370,6 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
 
       await createBooking.mutateAsync(bookingData)
 
-      toast.success(t("bookingConfirmedTitle"))
       handleNextStep()
     } catch (error) {
       toast.error(t("bookingError"))
@@ -979,11 +977,9 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               transition={{ delay: 0.2 }}
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                Confirm Your Booking
+                {t("confirmYourBookingTitle")}
               </h2>
-              <p className="text-gray-600">
-                Review your booking details before confirming
-              </p>
+              <p className="text-gray-600">{t("confirmYourBookingSubtitle")}</p>
             </motion.div>
 
             <motion.div
@@ -1036,96 +1032,145 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                     {t("bed", { count: formData.selectedBedIds.length })}
                   </span>
                 </div>
-                <motion.div
-                  className="flex justify-between items-end space-y-2"
-                  initial={{ scale: 0.8 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.6 }}
-                >
-                  <span className="font-bold text-xl">{t("total")}</span>
-
-                  {hasDiscount && (
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-lg">
+                  <motion.div
+                    className="space-y-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {/* Header */}
                     <motion.div
-                      className="flex flex-col items-end space-y-1"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4 }}
+                      className="flex items-center justify-between"
+                      initial={{ scale: 0.9 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.2 }}
                     >
-                      <div className="flex items-center space-x-2">
-                        <motion.span
-                          className="text-sm line-through text-gray-500"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.5 }}
-                        >
-                          {new Intl.NumberFormat("ru-RU", {
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          }).format(discountData.originalPrice) +
-                            " " +
-                            t("currency")}
-                        </motion.span>
+                      <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-200">
+                        {t("total")}
+                      </h3>
+
+                      {hasDiscount && (
                         <motion.div
-                          className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold"
-                          initial={{ scale: 0, rotate: -10 }}
+                          className="bg-gradient-to-r from-red-500 to-red-600 text-white text-sm px-3 py-1.5 rounded-full font-bold shadow-md"
+                          initial={{ scale: 0, rotate: -15 }}
                           animate={{ scale: 1, rotate: 0 }}
                           transition={{
                             type: "spring",
-                            stiffness: 500,
-                            damping: 25,
-                            delay: 0.6,
+                            stiffness: 400,
+                            damping: 20,
+                            delay: 0.4,
                           }}
                         >
-                          -{discountData.discountPercentage}%
+                          -{discountData?.discountPercentage}% OFF
                         </motion.div>
-                      </div>
-                      <motion.div
-                        className="text-sm text-green-600 font-semibold"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.7 }}
-                      >
-                        Экономия:{" "}
-                        {new Intl.NumberFormat("ru-RU", {
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 0,
-                        }).format(discountData.discountAmount) +
-                          " " +
-                          t("currency")}
-                      </motion.div>
+                      )}
                     </motion.div>
-                  )}
 
-                  {/* ИЗМЕНЕНО: Добавлена проверка на загрузку цены */}
-                  <div className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent">
-                    {isPriceLoading ? (
-                      <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
-                    ) : (
-                      <motion.span
-                        key={
-                          hasDiscount
-                            ? discountData.discountedPrice
-                            : totalPrice
-                        }
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 500,
-                          damping: 30,
-                          delay: 0.2,
-                        }}
+                    {/* Discount Information */}
+                    {hasDiscount && discountData && (
+                      <motion.div
+                        className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-600"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3 }}
                       >
-                        {hasDiscount
-                          ? new Intl.NumberFormat("ru-RU", {
-                              style: "currency",
-                              currency: "RUB",
-                            }).format(discountData.discountedPrice)
-                          : formattedTotalPrice}
-                      </motion.span>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-slate-600 dark:text-slate-400">
+                            Первоначальная цена:
+                          </span>
+                          <motion.span
+                            className="text-2xl font-bold line-through text-slate-400 dark:text-slate-500"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.5 }}
+                          >
+                            {new Intl.NumberFormat("ru-RU", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            }).format(discountData.originalPrice)}{" "}
+                            {t("currency")}
+                          </motion.span>
+                        </div>
+
+                        <motion.div
+                          className="flex items-center justify-between"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.6 }}
+                        >
+                          <span className="text-sm font-medium text-green-600 dark:text-green-400">
+                            {t("ecconomy")}:
+                          </span>
+                          <span className="text-lg font-bold text-green-600 dark:text-green-400">
+                            {new Intl.NumberFormat("ru-RU", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            }).format(discountData.discountAmount)}{" "}
+                            {t("currency")}
+                          </span>
+                        </motion.div>
+                      </motion.div>
                     )}
-                  </div>
-                </motion.div>
+
+                    {/* Final Price */}
+                    <motion.div
+                      className="text-center py-4"
+                      initial={{ scale: 0.8 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.4 }}
+                    >
+                      {isPriceLoading ? (
+                        <div className="flex items-center justify-center">
+                          <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
+                        </div>
+                      ) : (
+                        <motion.div
+                          key={
+                            hasDiscount
+                              ? discountData?.discountedPrice
+                              : totalPrice
+                          }
+                          className="text-5xl font-black bg-gradient-to-r from-primary-600 via-primary-600 to-primary-500 bg-clip-text text-transparent"
+                          initial={{ scale: 0, rotate: -5 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 20,
+                            delay: 0.2,
+                          }}
+                        >
+                          {hasDiscount && discountData
+                            ? new Intl.NumberFormat("ru-RU", {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0,
+                              }).format(discountData.discountedPrice)
+                            : formattedTotalPrice}{" "}
+                          <span className="text-2xl">{t("currency")}</span>
+                        </motion.div>
+                      )}
+                    </motion.div>
+
+                    {/* Decorative Elements */}
+                    <motion.div
+                      className="flex justify-center space-x-2 pt-2"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.8 }}
+                    >
+                      {[...Array(3)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="w-2 h-2 bg-gradient-to-r from-blue-400 to-primary-500 rounded-full"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.9 + i * 0.1 }}
+                        />
+                      ))}
+                    </motion.div>
+                  </motion.div>
+                </div>
               </motion.div>
 
               <motion.div
@@ -1403,7 +1448,8 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               >
                 <Image
                   src={
-                    room.images[0] ||
+                    process.env.NEXT_PUBLIC_STATIC_ASSETS_URL +
+                      room.images[0] ||
                     "/placeholder.svg?height=200&width=300&query=room interior" ||
                     "/placeholder.svg" ||
                     "/placeholder.svg" ||

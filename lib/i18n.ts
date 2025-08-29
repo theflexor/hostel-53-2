@@ -2,6 +2,7 @@ import type { Language } from "@/hooks/useLanguage"
 
 const translations = {
   en: {
+    ecconomy: "Economy",
     ourRoomsTitle: "ourRoomsTitle",
     check_in: "Check In",
     check_out: "Check Out",
@@ -216,10 +217,10 @@ const translations = {
     specialOffersTitle: "Special Offers",
     offerTitle1: "Weekly Stay",
     offerDesc1: "Stay 7+ nights and get a 15% discount.",
-    offerTitle2: "Student Discount",
-    offerDesc2: "Show your student ID and get 10% off.",
+    offerTitle2: "Monthly Stay",
+    offerDesc2: "Stay 30 days or more — 40% discount",
     offerTitle3: "Group Booking",
-    offerDesc3: "Book for 5+ people and save 20%.",
+    offerDesc3: "Book for 4+ people and save 40%.",
     whatWeProvideTitle: "What We Provide",
     provideTitle1: "Comfortable Beds",
     provideDesc1: "Quality mattresses and fresh linens.",
@@ -246,6 +247,7 @@ const translations = {
   },
 
   ru: {
+    ecconomy: "Экономия",
     ourRoomsTitle: "Наши номера",
     check_in: "Заселение",
     check_out: "Выселение",
@@ -464,8 +466,8 @@ const translations = {
     specialOffersTitle: "Специальные предложения",
     offerTitle1: "Недельное проживание",
     offerDesc1: "Проживание 7+ ночей со скидкой 15%.",
-    offerTitle2: "Скидка студентам",
-    offerDesc2: "Покажите студенческий билет и получите скидку 10%.",
+    offerTitle2: "Месячное проживание",
+    offerDesc2: "При проживании от 30 дней — скидка 40%",
     offerTitle3: "Групповое бронирование",
     offerDesc3: "Бронируйте для 4+ человек со скидкой 40%.",
     whatWeProvideTitle: "Что мы предоставляем",
@@ -493,6 +495,7 @@ const translations = {
   },
 
   ky: {
+    ecconomy: "Экономия",
     ourRoomsTitle: "Биздин бөлмөлөр",
     check_in: "Каттоо",
     check_out: "Чыгуу",
@@ -515,7 +518,7 @@ const translations = {
     step4: "4-кадам: Ырастоо",
     step5: "Бронирлөө ийгиликтүү!",
     confirmAndBook: "Ырастоо жана брондоо",
-    confirmYourBookingTitle: "Бронированиеңизди ырастаңыз",
+    confirmYourBookingTitle: "Бронду ырастаңыз",
     confirmYourBookingSubtitle:
       "Ырастоодон мурун, бронирлөөңүздүн чоо-жайын текшериңиз.",
     secureBooking: "Коопсуз бронирлөө",
@@ -704,10 +707,10 @@ const translations = {
     specialOffersTitle: "Атайын сунуштар",
     offerTitle1: "Жумалык жашоо",
     offerDesc1: "7+ түн жашап, 15% арзандатуу алыңыз.",
-    offerTitle2: "Студенттерге арзандатуу",
-    offerDesc2: "Студенттик билетти көрсөтүп, 10% арзандатуу алыңыз.",
+    offerTitle2: "Айлык жашоо",
+    offerDesc2: "30 күндөн ашык жашаганда — 40% арзандатуу",
     offerTitle3: "Топтук брондоо",
-    offerDesc3: "5+ адамга брондоп, 20% арзандатуу алыңыз.",
+    offerDesc3: "4+ адамга брондоп, 20% арзандатуу алыңыз.",
     whatWeProvideTitle: "Биз эмне сунуштайбыз",
     provideTitle1: "Ыңгайлуу төшөктөр",
     provideDesc1: "Сапаттуу матрастар жана таза шейшептер.",
@@ -759,7 +762,6 @@ export const useTranslation = (language: Language) => {
     key: keyof typeof translations.en,
     params?: Record<string, string | number>
   ): string => {
-    console.log(language)
     let str = translations[language]?.[key] ?? translations.en[key] ?? key
     const count = params?.count as number
 

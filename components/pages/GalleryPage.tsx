@@ -8,91 +8,112 @@ import { ImageIcon, BedIcon, HomeIcon, TreesIcon, EyeIcon } from "lucide-react"
 import Image from "next/image"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { motion, AnimatePresence } from "framer-motion"
-import { heroKitchenImage, heroOutsideImage } from "@/public"
+import {
+  bathRomImage,
+  heroKitchenImage,
+  heroOutsideImage,
+  inter3Image,
+  interierDivan,
+  interierKitchen,
+  interierRomImage,
+  interierRoom,
+  interierRoomImage2,
+  interierRoomImage3,
+  outsideImage,
+  outsideImage2,
+  outsideImage3,
+} from "@/public"
 const galleryImages = [
   {
-    src: "https://images.unsplash.com/photo-1564326895812-701bb858d5f2?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // entrance
-    title: "Main Entrance",
-    category: "exterior",
-    height: 600,
-    width: 400,
+    src: interierRomImage, // reception
+    title: "Room",
+    category: "rooms",
+    width: 600,
+    height: 400,
   },
   {
-    src: "https://i.pinimg.com/736x/be/0e/43/be0e43de0b2689430f805bb6361ee32b.jpg", // reception
-    title: "Reception",
+    src: interierRoom, // main entrance
+    title: "Room",
+    category: "rooms",
+    width: 400,
+    height: 600, // вертикальное
+  },
+  {
+    src: interierDivan, // female dorm
+    title: "Room",
     category: "interior",
-    height: 400,
     width: 600,
+    height: 400,
   },
   {
     src: heroKitchenImage, // kitchen
     title: "Common Kitchen",
     category: "interior",
-    height: 800,
-    width: 600,
+    width: 900,
+    height: 600, // большое фото
   },
   {
     src: heroOutsideImage, // courtyard
     title: "Green Courtyard",
     category: "exterior",
-    height: 400,
     width: 600,
+    height: 400,
   },
   {
-    src: "https://i.pinimg.com/736x/20/4e/e8/204ee8184a9a677d7642a42b9c7bdc1e.jpg", // shower
+    src: outsideImage, // courtyard
+    title: "Green Courtyard",
+    category: "exterior",
+    width: 600,
+    height: 400,
+  },
+  {
+    src: outsideImage2, // common area
+    title: "Common Area",
+    category: "exterior",
+    width: 600,
+    height: 400,
+  },
+  {
+    src: bathRomImage, // shower
     title: "Shower Room",
     category: "interior",
-    height: 600,
     width: 400,
+    height: 600, // вертикальное
   },
   {
-    src: "https://i.pinimg.com/1200x/7b/24/5d/7b245d3490aee0da962040b2ac5c1fd7.jpg", // lounge
-    title: "Common Area",
+    src: interierRoomImage3, // female dorm
+    title: "Room",
+    category: "rooms",
+    width: 600,
+    height: 400,
+  },
+  {
+    src: interierRoomImage2, // male dorm
+    title: "Room",
     category: "interior",
-    height: 400,
     width: 600,
-  },
-  {
-    src: "https://i.pinimg.com/736x/f2/bc/ac/f2bcaccdaf60077def966c9b369ae397.jpg", // male dorm
-    title: "Male Room",
-    category: "rooms",
     height: 400,
-    width: 600,
   },
   {
-    src: "https://i.pinimg.com/736x/ca/5b/a8/ca5ba846c75231e3c774dfd4cf359637.jpg", // female dorm
-    title: "Female Room",
-    category: "rooms",
-    height: 600,
-    width: 400,
-  },
-  {
-    src: "https://i.pinimg.com/736x/e2/d9/0b/e2d90b927e5531e6f52c9c82b09b9687.jpg", // mixed dorm
-    title: "Mixed Room",
-    category: "rooms",
-    height: 400,
-    width: 600,
-  },
-  {
-    src: "https://i.pinimg.com/736x/2b/7a/40/2b7a40da4e0aac81e16e2f35827b4272.jpg", // lobby
-    title: "Lobby",
+    src: interierKitchen, // kitchen
+    title: "Kitchen",
     category: "interior",
-    height: 800,
     width: 600,
+    height: 400,
   },
   {
-    src: "https://i.pinimg.com/1200x/9a/e1/8b/9ae18bda155bd94afed2d012b1806412.jpg", // terrace
-    title: "Terrace",
+    src: inter3Image, // male dorm
+    title: "Room",
+    category: "interior",
+    width: 600,
+    height: 400,
+  },
+  {
+    src: outsideImage3, // exterior
+    title: "Exterior",
     category: "exterior",
-    height: 400,
     width: 600,
-  },
-  {
-    src: "https://i.pinimg.com/1200x/81/a9/56/81a956778d377646f8b3bf716101969d.jpg", // work area
-    title: "Work Area",
-    category: "interior",
-    height: 600,
-    width: 400,
+    height: 400,
   },
 ]
 
@@ -122,6 +143,8 @@ export function GalleryPage() {
     if (language === "en") return title
     return titles[title]?.[language] || title
   }
+
+  console.log(galleryFilter)
 
   const filteredGalleryImages =
     galleryFilter === "all"

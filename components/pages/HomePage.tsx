@@ -168,13 +168,13 @@ export function HomePage() {
     },
     {
       titleKey: "offerTitle2",
-      discount: "10%",
+      discount: "40%",
       descKey: "offerDesc2",
       color: "from-green-500 to-emerald-500",
     },
     {
       titleKey: "offerTitle3",
-      discount: "20%",
+      discount: "40%",
       descKey: "offerDesc3",
       color: "from-purple-500 to-pink-500",
     },
