@@ -968,7 +968,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="space-y-8"
+            className="space-y-6 px-4 sm:px-6"
           >
             <motion.div
               className="text-center"
@@ -976,83 +976,87 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 px-2">
                 {t("confirmYourBookingTitle")}
               </h2>
-              <p className="text-gray-600">{t("confirmYourBookingSubtitle")}</p>
+              <p className="text-gray-600 text-sm sm:text-base px-2">
+                {t("confirmYourBookingSubtitle")}
+              </p>
             </motion.div>
 
             <motion.div
-              className="max-w-3xl mx-auto space-y-6"
+              className="max-w-3xl mx-auto space-y-4 sm:space-y-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
               <motion.div
-                className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border shadow-sm space-y-4"
+                className="p-4 sm:p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border shadow-sm space-y-3 sm:space-y-4"
                 whileHover={{ scale: 1.01 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
                 {/* ... (детали бронирования без изменений) */}
-                <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                  <span className="text-gray-600 font-medium">{t("room")}</span>
-                  <span className="font-semibold text-gray-800">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-gray-200 gap-1 sm:gap-0">
+                  <span className="text-gray-600 font-medium text-sm sm:text-base">
+                    {t("room")}
+                  </span>
+                  <span className="font-semibold text-gray-800 text-sm sm:text-base">
                     {room.name}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-gray-600 font-medium">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 gap-1 sm:gap-0">
+                  <span className="text-gray-600 font-medium text-sm sm:text-base">
                     {t("checkIn")}
                   </span>
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-gray-800 text-sm sm:text-base">
                     {dayjs(formData.checkIn).format("MMM DD, YYYY")}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-gray-600 font-medium">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 gap-1 sm:gap-0">
+                  <span className="text-gray-600 font-medium text-sm sm:text-base">
                     {t("checkOut")}
                   </span>
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-gray-800 text-sm sm:text-base">
                     {dayjs(formData.checkOut).format("MMM DD, YYYY")}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-gray-600 font-medium">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 gap-1 sm:gap-0">
+                  <span className="text-gray-600 font-medium text-sm sm:text-base">
                     {t("nights")}
                   </span>
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-gray-800 text-sm sm:text-base">
                     {t("nights", { count: nights })}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-gray-600 font-medium">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 gap-1 sm:gap-0">
+                  <span className="text-gray-600 font-medium text-sm sm:text-base">
                     {t("selectedBeds")}
                   </span>
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-gray-800 text-sm sm:text-base">
                     {t("bed", { count: formData.selectedBedIds.length })}
                   </span>
                 </div>
-                <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-lg">
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-slate-200 dark:border-slate-700 shadow-lg">
                   <motion.div
-                    className="space-y-4"
+                    className="space-y-3 sm:space-y-4"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                   >
                     {/* Header */}
                     <motion.div
-                      className="flex items-center justify-between"
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0"
                       initial={{ scale: 0.9 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.2 }}
                     >
-                      <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-200">
+                      <h3 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-200">
                         {t("total")}
                       </h3>
 
                       {hasDiscount && (
                         <motion.div
-                          className="bg-gradient-to-r from-red-500 to-red-600 text-white text-sm px-3 py-1.5 rounded-full font-bold shadow-md"
+                          className="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-full font-bold shadow-md self-start sm:self-auto"
                           initial={{ scale: 0, rotate: -15 }}
                           animate={{ scale: 1, rotate: 0 }}
                           transition={{
@@ -1070,17 +1074,17 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                     {/* Discount Information */}
                     {hasDiscount && discountData && (
                       <motion.div
-                        className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-600"
+                        className="bg-white dark:bg-slate-800 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-slate-200 dark:border-slate-600"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.3 }}
                       >
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-slate-600 dark:text-slate-400">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-1 sm:gap-0">
+                          <span className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                             Первоначальная цена:
                           </span>
                           <motion.span
-                            className="text-2xl font-bold line-through text-slate-400 dark:text-slate-500"
+                            className="text-lg sm:text-2xl font-bold line-through text-slate-400 dark:text-slate-500"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.5 }}
@@ -1094,15 +1098,15 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                         </div>
 
                         <motion.div
-                          className="flex items-center justify-between"
+                          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.6 }}
                         >
-                          <span className="text-sm font-medium text-green-600 dark:text-green-400">
+                          <span className="text-xs sm:text-sm font-medium text-green-600 dark:text-green-400">
                             {t("ecconomy")}:
                           </span>
-                          <span className="text-lg font-bold text-green-600 dark:text-green-400">
+                          <span className="text-base sm:text-lg font-bold text-green-600 dark:text-green-400">
                             {new Intl.NumberFormat("ru-RU", {
                               minimumFractionDigits: 0,
                               maximumFractionDigits: 0,
@@ -1115,14 +1119,14 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
 
                     {/* Final Price */}
                     <motion.div
-                      className="text-center py-4"
+                      className="text-center py-3 sm:py-4"
                       initial={{ scale: 0.8 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.4 }}
                     >
                       {isPriceLoading ? (
                         <div className="flex items-center justify-center">
-                          <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
+                          <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 animate-spin text-blue-600" />
                         </div>
                       ) : (
                         <motion.div
@@ -1131,7 +1135,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                               ? discountData?.discountedPrice
                               : totalPrice
                           }
-                          className="text-5xl font-black bg-gradient-to-r from-primary-600 via-primary-600 to-primary-500 bg-clip-text text-transparent"
+                          className="text-3xl sm:text-5xl font-black bg-gradient-to-r from-primary-600 via-primary-600 to-primary-500 bg-clip-text text-transparent"
                           initial={{ scale: 0, rotate: -5 }}
                           animate={{ scale: 1, rotate: 0 }}
                           transition={{
@@ -1147,14 +1151,16 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                                 maximumFractionDigits: 0,
                               }).format(discountData.discountedPrice)
                             : formattedTotalPrice}{" "}
-                          <span className="text-2xl">{t("currency")}</span>
+                          <span className="text-lg sm:text-2xl">
+                            {t("currency")}
+                          </span>
                         </motion.div>
                       )}
                     </motion.div>
 
                     {/* Decorative Elements */}
                     <motion.div
-                      className="flex justify-center space-x-2 pt-2"
+                      className="flex justify-center space-x-1.5 sm:space-x-2 pt-2"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.8 }}
@@ -1162,7 +1168,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                       {[...Array(3)].map((_, i) => (
                         <motion.div
                           key={i}
-                          className="w-2 h-2 bg-gradient-to-r from-blue-400 to-primary-500 rounded-full"
+                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gradient-to-r from-blue-400 to-primary-500 rounded-full"
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           transition={{ delay: 0.9 + i * 0.1 }}
@@ -1174,7 +1180,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               </motion.div>
 
               <motion.div
-                className="flex items-start space-x-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200"
+                className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.6 }}
@@ -1186,18 +1192,18 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                     setAgreedToTerms(!!checked)
                     setFormErrors((prev) => ({ ...prev, terms: "" }))
                   }}
-                  className="mt-1"
+                  className="mt-0.5 sm:mt-1 flex-shrink-0"
                 />
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <label
                     htmlFor="terms"
-                    className="font-medium leading-relaxed cursor-pointer"
+                    className="font-medium leading-relaxed cursor-pointer text-sm sm:text-base"
                   >
                     {t("termsAndConditions")}
                   </label>
                   {formErrors.terms && (
                     <motion.p
-                      className="text-red-500 text-sm mt-1"
+                      className="text-red-500 text-xs sm:text-sm mt-1"
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                     >
@@ -1208,18 +1214,20 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               </motion.div>
 
               <motion.div
-                className="p-4 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-lg"
+                className="p-3 sm:p-4 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-lg"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <Shield className="w-4 h-4 text-yellow-600" />
-                  <span className="font-medium text-yellow-800">
+                  <Shield className="w-4 h-4 text-yellow-600 flex-shrink-0" />
+                  <span className="font-medium text-yellow-800 text-sm sm:text-base">
                     Secure Booking
                   </span>
                 </div>
-                <p className="text-sm text-yellow-800">{t("paymentText")}</p>
+                <p className="text-xs sm:text-sm text-yellow-800 leading-relaxed">
+                  {t("paymentText")}
+                </p>
               </motion.div>
             </motion.div>
           </motion.div>
