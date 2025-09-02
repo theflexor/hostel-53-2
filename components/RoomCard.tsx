@@ -25,14 +25,13 @@ interface RoomCardProps {
   room: Room
 }
 
-
 const staticUrl = process.env.NEXT_PUBLIC_STATIC_ASSETS_URL || ""
 
 export function RoomCard({ room }: RoomCardProps) {
   const { language } = useLanguage()
   const { t } = useTranslation(language)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [isLiked, setIsLiked] = useState(false)
+  // const [isLiked, setIsLiked] = useState(false)
 
   const nextImage = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -66,7 +65,9 @@ export function RoomCard({ room }: RoomCardProps) {
       <Link href={`/rooms/${room.id}`} className="block">
         <div className="relative h-48 sm:h-64 overflow-hidden">
           <Image
-            src={staticUrl + room.images[currentImageIndex] || "/placeholder.svg"}
+            src={
+              staticUrl + room.images[currentImageIndex] || "/placeholder.svg"
+            }
             alt={room.name}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -90,12 +91,12 @@ export function RoomCard({ room }: RoomCardProps) {
             </>
           )}
 
-          <div
+          {/* <div
             className="absolute top-2 sm:top-4 right-2 sm:right-4"
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
-              setIsLiked(!isLiked)
+              // setIsLiked(!isLiked)
             }}
           >
             <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-white/90 hover:bg-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center cursor-pointer">
@@ -107,7 +108,7 @@ export function RoomCard({ room }: RoomCardProps) {
                 }`}
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="absolute top-2 sm:top-4 left-2 sm:left-4">
             <Badge

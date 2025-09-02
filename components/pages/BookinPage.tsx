@@ -215,7 +215,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
 
   useEffect(() => {
     if (pageTopRef.current) {
-      pageTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
+      // pageTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
     }
   }, [step])
 
@@ -975,6 +975,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               transition={{ delay: 0.2 }}
             >
               <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 px-2">
+                {t("confirmYourBookingTitle")}
                 {t("confirmYourBookingTitle")}
               </h2>
               <p className="text-gray-600 text-sm sm:text-base px-2">

@@ -39,7 +39,7 @@ export function RoomDetailsPage({ room }: RoomDetailsPageProps) {
   const router = useRouter()
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [isLiked, setIsLiked] = useState(false)
+  // const [isLiked, setIsLiked] = useState(false)
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % room.images.length)
@@ -68,7 +68,7 @@ export function RoomDetailsPage({ room }: RoomDetailsPageProps) {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <Button
               variant="ghost"
               onClick={() => router.back()}
@@ -98,7 +98,7 @@ export function RoomDetailsPage({ room }: RoomDetailsPageProps) {
                 <ShareIcon className="h-5 w-5" />
               </Button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -175,12 +175,12 @@ export function RoomDetailsPage({ room }: RoomDetailsPageProps) {
                       </span>
                     </div>
                   </div>
-                  <div className="text-right">
+                  {/* <div className="text-right">
                     <div className="text-4xl font-bold text-primary-600">
                       {room.price} {t("currency")}
                     </div>
                     <div className="text-gray-500">{t("perNight")}</div>
-                  </div>
+                  </div> */}
                 </div>
                 <p className="text-gray-600 text-lg leading-relaxed mb-8">
                   {room.description}
