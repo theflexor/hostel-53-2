@@ -1,14 +1,14 @@
-"use client"
+'use client';
 
-import dayjs from "dayjs"
-import React, { useState, useMemo, useEffect, useCallback, useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { DateRangePicker } from "@/components/DateRangePicker"
-import { useLanguage } from "@/hooks/useLanguage"
-import { useTranslation } from "@/lib/i18n"
-import { useCalculatePrice, useCreateBooking } from "@/hooks/useBookings"
-import type { Room } from "@/lib/types"
+import dayjs from 'dayjs';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { DateRangePicker } from '@/components/DateRangePicker';
+import { useLanguage } from '@/hooks/useLanguage';
+import { useTranslation } from '@/lib/i18n';
+import { useCalculatePrice, useCreateBooking } from '@/hooks/useBookings';
+import type { Room } from '@/lib/types';
 import {
   ArrowLeft,
   ArrowRight,
@@ -30,67 +30,67 @@ import {
   Shield,
   MapPin,
   Users,
-} from "lucide-react"
-import { AnimatePresence, motion } from "framer-motion"
-import { toast } from "sonner"
-import Image from "next/image"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { cn } from "@/lib/utils"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Badge } from "@/components/ui/badge"
-import { useBeds } from "@/hooks/useBeds"
-import { useRouter } from "next/navigation"
+} from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { toast } from 'sonner';
+import Image from 'next/image';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { cn } from '@/lib/utils';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
+import { useBeds } from '@/hooks/useBeds';
+import { useRouter } from 'next/navigation';
 // ДОБАВЛЕНО: Импортируем хук для расчета цены
 
 export interface Bed {
-  id: number
-  number: number
-  tier: "BOTTOM" | "TOP"
-  roomId: number
-  available: boolean
+  id: number;
+  number: number;
+  tier: 'BOTTOM' | 'TOP';
+  roomId: number;
+  available: boolean;
   bookedPeriods: {
-    start: string
-    end: string
-  }[]
+    start: string;
+    end: string;
+  }[];
 }
 
 interface CreateBookingData {
-  firstName: string
-  lastName: string
-  email: string
-  phone: string
-  selectedBedIds: number[]
-  roomId: number
-  checkIn: string
-  checkOut: string
-  specialRequests: string
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  selectedBedIds: number[];
+  roomId: number;
+  checkIn: string;
+  checkOut: string;
+  specialRequests: string;
 }
 
 interface BookingPageProps {
-  room: Room
-  onClose?: () => void
+  room: Room;
+  onClose?: () => void;
 }
 
 const pageVariants = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -20 },
-}
+};
 
 const cardVariants = {
   initial: { opacity: 0, scale: 0.95 },
   animate: { opacity: 1, scale: 1 },
   hover: { scale: 1.02, y: -2 },
-}
+};
 
 const bedCardVariants = {
   initial: { opacity: 0, scale: 0.8 },
   animate: { opacity: 1, scale: 1 },
   hover: { scale: 1.05, rotate: 1 },
   tap: { scale: 0.95 },
-}
+};
 
 const stepVariants = {
   hidden: { opacity: 0, x: 50, scale: 0.95 },
@@ -98,15 +98,15 @@ const stepVariants = {
     opacity: 1,
     x: 0,
     scale: 1,
-    transition: { duration: 0.4, ease: "easeOut" },
+    transition: { duration: 0.4, ease: 'easeOut' },
   },
   exit: {
     opacity: 0,
     x: -50,
     scale: 0.95,
-    transition: { duration: 0.3, ease: "easeIn" },
+    transition: { duration: 0.3, ease: 'easeIn' },
   },
-}
+};
 
 const staggerContainer = {
   animate: {
@@ -114,12 +114,12 @@ const staggerContainer = {
       staggerChildren: 0.1,
     },
   },
-}
+};
 
 const staggerItem = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-}
+};
 
 // const discountData = {
 //   originalPrice: 35000.0,
@@ -131,25 +131,25 @@ const staggerItem = {
 // const hasDiscount = discountData.discountPercentage > 0
 
 export function BookingPage({ room, onClose }: BookingPageProps) {
-  const router = useRouter()
-  const pageTopRef = useRef(null)
-  const { language } = useLanguage()
-  const { t } = useTranslation(language)
-  const createBooking = useCreateBooking()
-  const [step, setStep] = useState(1)
+  const router = useRouter();
+  const pageTopRef = useRef(null);
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+  const createBooking = useCreateBooking();
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
     selectedBedIds: [] as number[],
-    specialRequests: "",
-  })
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({})
-  const [agreedToTerms, setAgreedToTerms] = useState(false)
-  const [bookingReference, setBookingReference] = useState("")
+    specialRequests: '',
+  });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [bookingReference, setBookingReference] = useState('');
 
-  const shouldFetchBeds = !!formData.checkIn && !!formData.checkOut
+  const shouldFetchBeds = !!formData.checkIn && !!formData.checkOut;
   const {
     data: beds = [],
     isLoading: isLoadingBeds,
@@ -159,172 +159,153 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
     startTime: formData.checkIn,
     endTime: formData.checkOut,
     // enabled: shouldFetchBeds,
-  })
+  });
 
   const nights = useMemo(() => {
-    if (!formData.checkIn || !formData.checkOut) return 0
-    const checkIn = dayjs(formData.checkIn)
-    const checkOut = dayjs(formData.checkOut)
-    const diff = checkOut.diff(checkIn, "day")
-    return diff > 0 ? diff : 0
-  }, [formData.checkIn, formData.checkOut])
+    if (!formData.checkIn || !formData.checkOut) return 0;
+    const checkIn = dayjs(formData.checkIn);
+    const checkOut = dayjs(formData.checkOut);
+    const diff = checkOut.diff(checkIn, 'day');
+    return diff > 0 ? diff : 0;
+  }, [formData.checkIn, formData.checkOut]);
 
   // ДОБАВЛЕНО: Вызываем хук для получения цены с бэкенда
   const {
     data: serverCalculatedPrice,
     isLoading: isPriceLoading,
     error: priceError,
-  } = useCalculatePrice(
-    room.id,
-    formData.selectedBedIds,
-    formData.checkIn,
-    formData.checkOut
-  )
+  } = useCalculatePrice(room.id, formData.selectedBedIds, formData.checkIn, formData.checkOut);
 
-  console.log(serverCalculatedPrice)
+  console.log(serverCalculatedPrice);
 
   const discountData = serverCalculatedPrice || {
     originalPrice: 0,
     discountedPrice: 0,
     discountAmount: 0,
     discountPercentage: 0,
-  }
+  };
 
-  const hasDiscount = discountData.discountPercentage > 0
-  const totalPrice = hasDiscount
-    ? discountData.discountedPrice
-    : discountData.originalPrice || 0
+  const hasDiscount = discountData.discountPercentage > 0;
+  const totalPrice = hasDiscount ? discountData.discountedPrice : discountData.originalPrice || 0;
 
   // ИЗМЕНЕНО: Теперь totalPrice берется из хука, а не вычисляется на клиенте
   // const totalPrice = serverCalculatedPrice ?? 0
 
   // Этот useMemo оставляем, так как форматирование все еще нужно
   const formattedTotalPrice = useMemo(() => {
-    const priceToFormat = hasDiscount
-      ? discountData.discountedPrice
-      : totalPrice
-    return new Intl.NumberFormat(language === "en" ? "en-US" : "ru-RU", {
+    const priceToFormat = hasDiscount ? discountData.discountedPrice : totalPrice;
+    return new Intl.NumberFormat(language === 'en' ? 'en-US' : 'ru-RU', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(priceToFormat)
-  }, [totalPrice, discountData, hasDiscount, language])
+    }).format(priceToFormat);
+  }, [totalPrice, discountData, hasDiscount, language]);
 
   useEffect(() => {
-    setFormData((prev) => ({ ...prev, selectedBedIds: [] }))
-  }, [formData.checkIn, formData.checkOut])
+    setFormData((prev) => ({ ...prev, selectedBedIds: [] }));
+  }, [formData.checkIn, formData.checkOut]);
 
   useEffect(() => {
     if (pageTopRef.current) {
       // pageTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
     }
-  }, [step])
+  }, [step]);
 
   useEffect(() => {
     // Trigger price calculation immediately when beds or dates change
-    if (
-      formData.selectedBedIds.length > 0 &&
-      formData.checkIn &&
-      formData.checkOut
-    ) {
-      console.log("[v0] Triggering price calculation for:", {
+    if (formData.selectedBedIds.length > 0 && formData.checkIn && formData.checkOut) {
+      console.log('[v0] Triggering price calculation for:', {
         bedIds: formData.selectedBedIds,
         checkIn: formData.checkIn,
         checkOut: formData.checkOut,
-      })
+      });
     }
-  }, [formData.selectedBedIds, formData.checkIn, formData.checkOut])
+  }, [formData.selectedBedIds, formData.checkIn, formData.checkOut]);
 
-  const handleDateChange = useCallback(
-    (range: { from?: string; to?: string }) => {
-      setFormData((prev) => ({
-        ...prev,
-        checkIn: range.from ? range.from : "",
-        checkOut: range.to ? range.to : "",
-      }))
-    },
-    []
-  )
+  const handleDateChange = useCallback((range: { from?: string; to?: string }) => {
+    setFormData((prev) => ({
+      ...prev,
+      checkIn: range.from ? range.from : '',
+      checkOut: range.to ? range.to : '',
+    }));
+  }, []);
 
   const handleBedSelection = useCallback(
     (bedId: number) => {
       setFormData((prev) => {
-        const currentSelected = prev.selectedBedIds
-        const isSelected = currentSelected.includes(bedId)
+        const currentSelected = prev.selectedBedIds;
+        const isSelected = currentSelected.includes(bedId);
 
         if (isSelected) {
           return {
             ...prev,
             selectedBedIds: currentSelected.filter((id) => id !== bedId),
-          }
+          };
         } else {
           if (currentSelected.length < room.capacity) {
             return {
               ...prev,
               selectedBedIds: [...currentSelected, bedId],
-            }
+            };
           } else {
-            toast.warning(t("maxGuestsReached", { count: room.capacity }))
-            return prev
+            toast.warning(t('maxGuestsReached', { count: room.capacity }));
+            return prev;
           }
         }
-      })
+      });
     },
-    [t, room.capacity]
-  )
+    [t, room.capacity],
+  );
 
   const validateCurrentStepFields = useCallback(() => {
-    let isValid = true
-    const newErrors: Record<string, string> = {}
+    let isValid = true;
+    const newErrors: Record<string, string> = {};
 
     if (step === 3) {
       if (!formData.firstName.trim()) {
-        newErrors.firstName = t("requiredField")
-        isValid = false
+        newErrors.firstName = t('requiredField');
+        isValid = false;
       }
       if (!formData.lastName.trim()) {
-        newErrors.lastName = t("requiredField")
-        isValid = false
+        newErrors.lastName = t('requiredField');
+        isValid = false;
       }
       if (!formData.email.trim()) {
-        newErrors.email = t("requiredField")
-        isValid = false
+        newErrors.email = t('requiredField');
+        isValid = false;
       } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        newErrors.email = t("invalidEmail")
-        isValid = false
+        newErrors.email = t('invalidEmail');
+        isValid = false;
       }
       if (!formData.phone.trim()) {
-        newErrors.phone = t("requiredField")
-        isValid = false
+        newErrors.phone = t('requiredField');
+        isValid = false;
       }
     } else if (step === 4) {
       if (!agreedToTerms) {
-        newErrors.terms = t("agreeToTerms")
-        isValid = false
+        newErrors.terms = t('agreeToTerms');
+        isValid = false;
       }
     }
-    return [isValid, newErrors] as [boolean, Record<string, string>]
-  }, [formData, step, agreedToTerms, t])
+    return [isValid, newErrors] as [boolean, Record<string, string>];
+  }, [formData, step, agreedToTerms, t]);
 
   const runValidationAndSetErrors = useCallback(() => {
-    const [isValid, errors] = validateCurrentStepFields()
-    setFormErrors(errors)
-    return isValid
-  }, [validateCurrentStepFields])
+    const [isValid, errors] = validateCurrentStepFields();
+    setFormErrors(errors);
+    return isValid;
+  }, [validateCurrentStepFields]);
 
   const handleNextStep = useCallback(() => {
-    if (
-      step === 1 &&
-      (!formData.checkIn || !formData.checkOut || nights <= 0)
-    ) {
-      toast.error(t("pleaseSelectValidDates"))
-      return
+    if (step === 1 && (!formData.checkIn || !formData.checkOut || nights <= 0)) {
+      toast.error(t('pleaseSelectValidDates'));
+      return;
     }
     if (step === 2 && formData.selectedBedIds.length === 0) {
-      toast.error(t("pleaseSelectAtLeastOneBed"))
-      return
+      toast.error(t('pleaseSelectAtLeastOneBed'));
+      return;
     }
     if (runValidationAndSetErrors()) {
-      setStep((s) => s + 1)
+      setStep((s) => s + 1);
     }
   }, [
     runValidationAndSetErrors,
@@ -334,27 +315,27 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
     formData.selectedBedIds.length,
     nights,
     t,
-  ])
+  ]);
 
   const handlePrevStep = useCallback(() => {
-    setStep((s) => s - 1)
-    setFormErrors({})
-  }, [])
+    setStep((s) => s - 1);
+    setFormErrors({});
+  }, []);
 
   const generateBookingReference = () => {
     return `BK${Date.now().toString().slice(-6)}${Math.random()
       .toString(36)
       .substr(2, 3)
-      .toUpperCase()}`
-  }
+      .toUpperCase()}`;
+  };
 
   const handleSubmit = useCallback(async () => {
     if (!runValidationAndSetErrors()) {
-      return
+      return;
     }
     try {
-      const reference = generateBookingReference()
-      setBookingReference(reference)
+      const reference = generateBookingReference();
+      setBookingReference(reference);
 
       const bookingData: CreateBookingData = {
         firstName: formData.firstName,
@@ -366,22 +347,15 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
         checkIn: formData.checkIn,
         checkOut: formData.checkOut,
         specialRequests: formData.specialRequests,
-      }
+      };
 
-      await createBooking.mutateAsync(bookingData)
+      await createBooking.mutateAsync(bookingData);
 
-      handleNextStep()
+      handleNextStep();
     } catch (error) {
-      toast.error(t("bookingError"))
+      toast.error(t('bookingError'));
     }
-  }, [
-    createBooking,
-    formData,
-    room.id,
-    t,
-    handleNextStep,
-    runValidationAndSetErrors,
-  ])
+  }, [createBooking, formData, room.id, t, handleNextStep, runValidationAndSetErrors]);
 
   const downloadConfirmation = useCallback(() => {
     const confirmationData = {
@@ -394,51 +368,51 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
       customerName: `${formData.firstName} ${formData.lastName}`,
       email: formData.email,
       phone: formData.phone,
-    }
+    };
 
-    const dataStr = JSON.stringify(confirmationData, null, 2)
-    const dataBlob = new Blob([dataStr], { type: "application/json" })
-    const url = URL.createObjectURL(dataBlob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = `booking-confirmation-${bookingReference}.json`
-    link.click()
-    URL.revokeObjectURL(url)
-  }, [bookingReference, room.name, formData, formattedTotalPrice])
+    const dataStr = JSON.stringify(confirmationData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `booking-confirmation-${bookingReference}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }, [bookingReference, room.name, formData, formattedTotalPrice]);
 
   const shareBooking = useCallback(() => {
     if (navigator.share) {
       navigator.share({
-        title: "Booking Confirmation",
+        title: 'Booking Confirmation',
         text: `Booking confirmed for ${room.name}. Reference: ${bookingReference}`,
         url: window.location.href,
-      })
+      });
     } else {
-      document.execCommand("copy")
-      toast.success("Booking reference copied to clipboard!")
+      document.execCommand('copy');
+      toast.success('Booking reference copied to clipboard!');
     }
-  }, [bookingReference, room.name])
+  }, [bookingReference, room.name]);
 
   const stepsConfig = [
-    { id: 1, name: t("step1"), icon: Calendar, color: "bg-blue-500" },
-    { id: 2, name: t("step2"), icon: BedIcon, color: "bg-green-500" },
-    { id: 3, name: t("step3"), icon: User, color: "bg-purple-500" },
-    { id: 4, name: t("step4"), icon: CreditCard, color: "bg-orange-500" },
-    { id: 5, name: t("step5"), icon: CheckCircle, color: "bg-emerald-500" },
-  ]
+    { id: 1, name: t('step1'), icon: Calendar, color: 'bg-blue-500' },
+    { id: 2, name: t('step2'), icon: BedIcon, color: 'bg-green-500' },
+    { id: 3, name: t('step3'), icon: User, color: 'bg-purple-500' },
+    { id: 4, name: t('step4'), icon: CreditCard, color: 'bg-orange-500' },
+    { id: 5, name: t('step5'), icon: CheckCircle, color: 'bg-emerald-500' },
+  ];
 
   const roomAmenities = [
-    { icon: Wifi, label: "Free WiFi" },
-    { icon: Car, label: "Parking" },
-    { icon: Coffee, label: "Coffee" },
-    { icon: Tv, label: "TV" },
-  ]
+    { icon: Wifi, label: 'Free WiFi' },
+    { icon: Car, label: 'Parking' },
+    { icon: Coffee, label: 'Coffee' },
+    { icon: Tv, label: 'TV' },
+  ];
 
-  const renderBedCards = (bedType: "TOP" | "BOTTOM") => {
+  const renderBedCards = (bedType: 'TOP' | 'BOTTOM') => {
     // ... остальной код renderBedCards без изменений
-    const filteredBeds = beds.filter((bed) => bed.tier === bedType)
+    const filteredBeds = beds.filter((bed) => bed.tier === bedType);
     if (filteredBeds.length === 0) {
-      return null
+      return null;
     }
     return (
       <motion.div
@@ -448,7 +422,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
         transition={{ delay: 0.2 }}
       >
         <h3 className="text-xl font-bold text-gray-800">
-          {bedType === "TOP" ? t("topBunks") : t("bottomBunks")}
+          {bedType === 'TOP' ? t('topBunks') : t('bottomBunks')}
         </h3>
         <motion.div
           className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
@@ -468,12 +442,12 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
             >
               <Card
                 className={cn(
-                  "p-4 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all duration-300 border-2 aspect-square relative overflow-hidden",
+                  'p-4 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all duration-300 border-2 aspect-square relative overflow-hidden',
                   bed.available
-                    ? "border-gray-200 hover:border-primary-600 hover:shadow-xl"
-                    : "bg-gray-100 text-gray-400 cursor-not-allowed opacity-70",
+                    ? 'border-gray-200 hover:border-primary-600 hover:shadow-xl'
+                    : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-70',
                   formData.selectedBedIds.includes(bed.id) &&
-                    "border-primary-600 ring-4 ring-primary-100 shadow-xl bg-gradient-to-br from-primary-50 to-primary-100"
+                    'border-primary-600 ring-4 ring-primary-100 shadow-xl bg-gradient-to-br from-primary-50 to-primary-100',
                 )}
                 onClick={() => bed.available && handleBedSelection(bed.id)}
               >
@@ -483,7 +457,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                     initial={{ scale: 0, rotate: -180 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{
-                      type: "spring",
+                      type: 'spring',
                       stiffness: 500,
                       damping: 30,
                     }}
@@ -495,63 +469,56 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                   className="relative"
                   whileHover={{ scale: 1.1 }}
                   transition={{
-                    type: "spring",
+                    type: 'spring',
                     stiffness: 400,
                     damping: 10,
                   }}
                 >
                   <BedIcon
-                    className={cn(
-                      "w-10 h-10",
-                      bed.available ? "text-gray-700" : "text-gray-400"
-                    )}
+                    className={cn('w-10 h-10', bed.available ? 'text-gray-700' : 'text-gray-400')}
                   />
-                  {bed.tier === "TOP" && (
+                  {bed.tier === 'TOP' && (
                     <motion.div
                       className="absolute -top-1 -right-1 bg-white rounded-full p-0.5 shadow"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.2 }}
                     >
-                      <span className="text-[10px] font-bold text-gray-600">
-                        ▲
-                      </span>
+                      <span className="text-[10px] font-bold text-gray-600">▲</span>
                     </motion.div>
                   )}
-                  {bed.tier === "BOTTOM" && (
+                  {bed.tier === 'BOTTOM' && (
                     <motion.div
                       className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.2 }}
                     >
-                      <span className="text-[10px] font-bold text-gray-600">
-                        ▼
-                      </span>
+                      <span className="text-[10px] font-bold text-gray-600">▼</span>
                     </motion.div>
                   )}
                 </motion.div>
                 <span className="font-semibold text-sm text-center">
-                  {t("bed") + " " + bed.number}
+                  {t('bed') + ' ' + bed.number}
                 </span>
                 {bed.available ? (
                   <Badge
                     variant="default"
                     className="text-xs bg-green-100 text-green-700 hover:bg-green-200"
                   >
-                    {t("available")}
+                    {t('available')}
                   </Badge>
                 ) : (
                   <div className="flex flex-col text-center text-xs text-gray-500 font-medium">
                     {bed.bookedPeriods.length > 0 ? (
                       bed.bookedPeriods.map((period, periodIndex) => (
                         <span key={periodIndex} className="block leading-tight">
-                          {dayjs(period.start).format("MMM D")} -{" "}
-                          {dayjs(period.end).format("MMM D")}
+                          {dayjs(period.start).format('MMM D')} -{' '}
+                          {dayjs(period.end).format('MMM D')}
                         </span>
                       ))
                     ) : (
-                      <span className="block">{t("booked")}</span>
+                      <span className="block">{t('booked')}</span>
                     )}
                   </div>
                 )}
@@ -560,8 +527,8 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
           ))}
         </motion.div>
       </motion.div>
-    )
-  }
+    );
+  };
 
   const renderStepContent = () => {
     switch (step) {
@@ -582,10 +549,8 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                {t("selectDates")}
-              </h2>
-              <p className="text-gray-600">{t("selectYourDates")}</p>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('selectDates')}</h2>
+              <p className="text-gray-600">{t('selectYourDates')}</p>
             </motion.div>
 
             <motion.div
@@ -595,7 +560,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               transition={{ delay: 0.4 }}
             >
               <Label className="font-semibold text-lg mb-4 block text-center">
-                {t("selectDates")}
+                {t('selectDates')}
               </Label>
               <DateRangePicker
                 onDateRangeChange={handleDateChange}
@@ -625,9 +590,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                         </svg>
                       </div>
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-1">
-                      {t("check_in")}
-                    </h3>
+                    <h3 className="font-semibold text-gray-900 mb-1">{t('check_in')}</h3>
                     <p className="text-2xl font-bold text-primary-500">14:00</p>
                   </div>
 
@@ -649,9 +612,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                         </svg>
                       </div>
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-1">
-                      {t("check_out")}
-                    </h3>
+                    <h3 className="font-semibold text-gray-900 mb-1">{t('check_out')}</h3>
                     <p className="text-2xl font-bold text-red-500">12:00</p>
                   </div>
                 </div>
@@ -670,13 +631,13 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    {t("fixed_check_in_out_time")}
+                    {t('fixed_check_in_out_time')}
                   </div>
                 </div>
               </div>
             </motion.div>
           </motion.div>
-        )
+        );
       case 2:
         return (
           // ... без изменений
@@ -694,10 +655,8 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                {t("selectBeds")}
-              </h2>
-              <p className="text-gray-600">{t("selectBedsSubtitle")}</p>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('selectBeds')}</h2>
+              <p className="text-gray-600">{t('selectBedsSubtitle')}</p>
             </motion.div>
 
             {isLoadingBeds ? (
@@ -712,12 +671,12 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                     transition={{
                       duration: 1,
                       repeat: Number.POSITIVE_INFINITY,
-                      ease: "linear",
+                      ease: 'linear',
                     }}
                   >
                     <Loader2 className="w-12 h-12 text-primary-600 mx-auto mb-4" />
                   </motion.div>
-                  <p className="text-gray-600">{t("loadingBeds")}</p>
+                  <p className="text-gray-600">{t('loadingBeds')}</p>
                 </div>
               </motion.div>
             ) : bedsError ? (
@@ -727,12 +686,12 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 animate={{ opacity: 1, scale: 1 }}
               >
                 <X className="w-16 h-16 text-red-400 mx-auto mb-4" />
-                <p className="text-red-600">{t("errorFetchingBeds")}</p>
+                <p className="text-red-600">{t('errorFetchingBeds')}</p>
               </motion.div>
             ) : beds.length > 0 ? (
               <div className="space-y-8">
-                {renderBedCards("TOP")}
-                {renderBedCards("BOTTOM")}
+                {renderBedCards('TOP')}
+                {renderBedCards('BOTTOM')}
               </div>
             ) : (
               <motion.div
@@ -741,7 +700,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 animate={{ opacity: 1, scale: 1 }}
               >
                 <BedIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">{t("noBedsAvailable")}</p>
+                <p className="text-gray-600">{t('noBedsAvailable')}</p>
               </motion.div>
             )}
 
@@ -756,19 +715,18 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                   >
                     <CheckCircle className="w-5 h-5" />
                   </motion.div>
                   <span className="font-medium">
-                    {t("selectedBeds")}: {formData.selectedBedIds.length} /{" "}
-                    {room.capacity}
+                    {t('selectedBeds')}: {formData.selectedBedIds.length} / {room.capacity}
                   </span>
                 </div>
               </motion.div>
             )}
           </motion.div>
-        )
+        );
       case 3:
         return (
           // ... без изменений
@@ -786,10 +744,8 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                {t("form_header")}
-              </h2>
-              <p className="text-gray-600">{t("subtitle")}</p>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('form_header')}</h2>
+              <p className="text-gray-600">{t('subtitle')}</p>
             </motion.div>
 
             <motion.div
@@ -798,13 +754,10 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               initial="initial"
               animate="animate"
             >
-              <motion.div
-                className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                variants={staggerItem}
-              >
+              <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-6" variants={staggerItem}>
                 <motion.div whileFocus={{ scale: 1.02 }}>
                   <Label htmlFor="firstName" className="mb-2 block font-medium">
-                    {t("firstName")} *
+                    {t('firstName')} *
                   </Label>
                   <Input
                     id="firstName"
@@ -813,15 +766,14 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                       setFormData((prev) => ({
                         ...prev,
                         firstName: e.target.value,
-                      }))
-                      setFormErrors((prev) => ({ ...prev, firstName: "" }))
+                      }));
+                      setFormErrors((prev) => ({ ...prev, firstName: '' }));
                     }}
                     className={cn(
-                      "h-12 transition-all duration-200",
-                      formErrors.firstName &&
-                        "border-red-500 focus:border-red-500"
+                      'h-12 transition-all duration-200',
+                      formErrors.firstName && 'border-red-500 focus:border-red-500',
                     )}
-                    placeholder={t("firstName_placeholder")}
+                    placeholder={t('firstName_placeholder')}
                   />
                   {formErrors.firstName && (
                     <motion.p
@@ -835,7 +787,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 </motion.div>
                 <motion.div whileFocus={{ scale: 1.02 }}>
                   <Label htmlFor="lastName" className="mb-2 block font-medium">
-                    {t("lastName")} *
+                    {t('lastName')} *
                   </Label>
                   <Input
                     id="lastName"
@@ -844,15 +796,14 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                       setFormData((prev) => ({
                         ...prev,
                         lastName: e.target.value,
-                      }))
-                      setFormErrors((prev) => ({ ...prev, lastName: "" }))
+                      }));
+                      setFormErrors((prev) => ({ ...prev, lastName: '' }));
                     }}
                     className={cn(
-                      "h-12 transition-all duration-200",
-                      formErrors.lastName &&
-                        "border-red-500 focus:border-red-500"
+                      'h-12 transition-all duration-200',
+                      formErrors.lastName && 'border-red-500 focus:border-red-500',
                     )}
-                    placeholder={t("lastName_placeholder")}
+                    placeholder={t('lastName_placeholder')}
                   />
                   {formErrors.lastName && (
                     <motion.p
@@ -866,13 +817,10 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 </motion.div>
               </motion.div>
 
-              <motion.div
-                className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                variants={staggerItem}
-              >
+              <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-6" variants={staggerItem}>
                 <motion.div whileFocus={{ scale: 1.02 }}>
                   <Label htmlFor="email" className="mb-2 block font-medium">
-                    {t("email")} *
+                    {t('email')} *
                   </Label>
                   <Input
                     id="email"
@@ -882,14 +830,14 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                       setFormData((prev) => ({
                         ...prev,
                         email: e.target.value,
-                      }))
-                      setFormErrors((prev) => ({ ...prev, email: "" }))
+                      }));
+                      setFormErrors((prev) => ({ ...prev, email: '' }));
                     }}
                     className={cn(
-                      "h-12 transition-all duration-200",
-                      formErrors.email && "border-red-500 focus:border-red-500"
+                      'h-12 transition-all duration-200',
+                      formErrors.email && 'border-red-500 focus:border-red-500',
                     )}
-                    placeholder={t("email_placeholder")}
+                    placeholder={t('email_placeholder')}
                   />
                   {formErrors.email && (
                     <motion.p
@@ -903,7 +851,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 </motion.div>
                 <motion.div whileFocus={{ scale: 1.02 }}>
                   <Label htmlFor="phone" className="mb-2 block font-medium">
-                    {t("phone")} *
+                    {t('phone')} *
                   </Label>
                   <Input
                     id="phone"
@@ -913,14 +861,14 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                       setFormData((prev) => ({
                         ...prev,
                         phone: e.target.value,
-                      }))
-                      setFormErrors((prev) => ({ ...prev, phone: "" }))
+                      }));
+                      setFormErrors((prev) => ({ ...prev, phone: '' }));
                     }}
                     className={cn(
-                      "h-12 transition-all duration-200",
-                      formErrors.phone && "border-red-500 focus:border-red-500"
+                      'h-12 transition-all duration-200',
+                      formErrors.phone && 'border-red-500 focus:border-red-500',
                     )}
-                    placeholder={t("phone_placeholder")}
+                    placeholder={t('phone_placeholder')}
                   />
                   {formErrors.phone && (
                     <motion.p
@@ -935,12 +883,9 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               </motion.div>
 
               <motion.div variants={staggerItem}>
-                <Label
-                  htmlFor="specialRequests"
-                  className="mb-2 block font-medium"
-                >
+                <Label htmlFor="specialRequests" className="mb-2 block font-medium">
                   <MessageSquare className="w-4 h-4 inline mr-2" />
-                  {t("specialRequests")}
+                  {t('specialRequests')}
                 </Label>
                 <Textarea
                   id="specialRequests"
@@ -952,12 +897,12 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                     }))
                   }
                   className="min-h-[100px] resize-none transition-all duration-200"
-                  placeholder={t("specialRequestsPlaceholder")}
+                  placeholder={t('specialRequestsPlaceholder')}
                 />
               </motion.div>
             </motion.div>
           </motion.div>
-        )
+        );
       case 4:
         return (
           <motion.div
@@ -975,11 +920,10 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               transition={{ delay: 0.2 }}
             >
               <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 px-2">
-                {t("confirmYourBookingTitle")}
-                {t("confirmYourBookingTitle")}
+                {t('confirmYourBookingTitle')}
               </h2>
               <p className="text-gray-600 text-sm sm:text-base px-2">
-                {t("confirmYourBookingSubtitle")}
+                {t('confirmYourBookingSubtitle')}
               </p>
             </motion.div>
 
@@ -992,12 +936,12 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               <motion.div
                 className="p-4 sm:p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border shadow-sm space-y-3 sm:space-y-4"
                 whileHover={{ scale: 1.01 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               >
                 {/* ... (детали бронирования без изменений) */}
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-gray-200 gap-1 sm:gap-0">
                   <span className="text-gray-600 font-medium text-sm sm:text-base">
-                    {t("room")}
+                    {t('room')}
                   </span>
                   <span className="font-semibold text-gray-800 text-sm sm:text-base">
                     {room.name}
@@ -1005,34 +949,34 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 gap-1 sm:gap-0">
                   <span className="text-gray-600 font-medium text-sm sm:text-base">
-                    {t("checkIn")}
+                    {t('checkIn')}
                   </span>
                   <span className="font-semibold text-gray-800 text-sm sm:text-base">
-                    {dayjs(formData.checkIn).format("MMM DD, YYYY")}
+                    {dayjs(formData.checkIn).format('MMM DD, YYYY')}
                   </span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 gap-1 sm:gap-0">
                   <span className="text-gray-600 font-medium text-sm sm:text-base">
-                    {t("checkOut")}
+                    {t('checkOut')}
                   </span>
                   <span className="font-semibold text-gray-800 text-sm sm:text-base">
-                    {dayjs(formData.checkOut).format("MMM DD, YYYY")}
+                    {dayjs(formData.checkOut).format('MMM DD, YYYY')}
                   </span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 gap-1 sm:gap-0">
                   <span className="text-gray-600 font-medium text-sm sm:text-base">
-                    {t("nights")}
+                    {t('nights')}
                   </span>
                   <span className="font-semibold text-gray-800 text-sm sm:text-base">
-                    {t("nights", { count: nights })}
+                    {t('nights', { count: nights })}
                   </span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 gap-1 sm:gap-0">
                   <span className="text-gray-600 font-medium text-sm sm:text-base">
-                    {t("selectedBeds")}
+                    {t('selectedBeds')}
                   </span>
                   <span className="font-semibold text-gray-800 text-sm sm:text-base">
-                    {t("bed", { count: formData.selectedBedIds.length })}
+                    {t('bed', { count: formData.selectedBedIds.length })}
                   </span>
                 </div>
                 <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-slate-200 dark:border-slate-700 shadow-lg">
@@ -1050,7 +994,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                       transition={{ delay: 0.2 }}
                     >
                       <h3 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-200">
-                        {t("total")}
+                        {t('total')}
                       </h3>
 
                       {hasDiscount && (
@@ -1059,7 +1003,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                           initial={{ scale: 0, rotate: -15 }}
                           animate={{ scale: 1, rotate: 0 }}
                           transition={{
-                            type: "spring",
+                            type: 'spring',
                             stiffness: 400,
                             damping: 20,
                             delay: 0.4,
@@ -1088,11 +1032,11 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.5 }}
                           >
-                            {new Intl.NumberFormat("ru-RU", {
+                            {new Intl.NumberFormat('ru-RU', {
                               minimumFractionDigits: 0,
                               maximumFractionDigits: 0,
-                            }).format(discountData.originalPrice)}{" "}
-                            {t("currency")}
+                            }).format(discountData.originalPrice)}{' '}
+                            {t('currency')}
                           </motion.span>
                         </div>
 
@@ -1103,14 +1047,14 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                           transition={{ delay: 0.6 }}
                         >
                           <span className="text-xs sm:text-sm font-medium text-green-600 dark:text-green-400">
-                            {t("ecconomy")}:
+                            {t('ecconomy')}:
                           </span>
                           <span className="text-base sm:text-lg font-bold text-green-600 dark:text-green-400">
-                            {new Intl.NumberFormat("ru-RU", {
+                            {new Intl.NumberFormat('ru-RU', {
                               minimumFractionDigits: 0,
                               maximumFractionDigits: 0,
-                            }).format(discountData.discountAmount)}{" "}
-                            {t("currency")}
+                            }).format(discountData.discountAmount)}{' '}
+                            {t('currency')}
                           </span>
                         </motion.div>
                       </motion.div>
@@ -1129,30 +1073,24 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                         </div>
                       ) : (
                         <motion.div
-                          key={
-                            hasDiscount
-                              ? discountData?.discountedPrice
-                              : totalPrice
-                          }
+                          key={hasDiscount ? discountData?.discountedPrice : totalPrice}
                           className="text-3xl sm:text-5xl font-black bg-gradient-to-r from-primary-600 via-primary-600 to-primary-500 bg-clip-text text-transparent"
                           initial={{ scale: 0, rotate: -5 }}
                           animate={{ scale: 1, rotate: 0 }}
                           transition={{
-                            type: "spring",
+                            type: 'spring',
                             stiffness: 300,
                             damping: 20,
                             delay: 0.2,
                           }}
                         >
                           {hasDiscount && discountData
-                            ? new Intl.NumberFormat("ru-RU", {
+                            ? new Intl.NumberFormat('ru-RU', {
                                 minimumFractionDigits: 0,
                                 maximumFractionDigits: 0,
                               }).format(discountData.discountedPrice)
-                            : formattedTotalPrice}{" "}
-                          <span className="text-lg sm:text-2xl">
-                            {t("currency")}
-                          </span>
+                            : formattedTotalPrice}{' '}
+                          <span className="text-lg sm:text-2xl">{t('currency')}</span>
                         </motion.div>
                       )}
                     </motion.div>
@@ -1188,8 +1126,8 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                   id="terms"
                   checked={agreedToTerms}
                   onCheckedChange={(checked) => {
-                    setAgreedToTerms(!!checked)
-                    setFormErrors((prev) => ({ ...prev, terms: "" }))
+                    setAgreedToTerms(!!checked);
+                    setFormErrors((prev) => ({ ...prev, terms: '' }));
                   }}
                   className="mt-0.5 sm:mt-1 flex-shrink-0"
                 />
@@ -1198,7 +1136,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                     htmlFor="terms"
                     className="font-medium leading-relaxed cursor-pointer text-sm sm:text-base"
                   >
-                    {t("termsAndConditions")}
+                    {t('termsAndConditions')}
                   </label>
                   {formErrors.terms && (
                     <motion.p
@@ -1225,12 +1163,12 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm text-yellow-800 leading-relaxed">
-                  {t("paymentText")}
+                  {t('paymentText')}
                 </p>
               </motion.div>
             </motion.div>
           </motion.div>
-        )
+        );
       case 5:
         return (
           // ... без изменений
@@ -1239,14 +1177,14 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
             className="text-center py-12 flex flex-col items-center justify-center"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: "spring", stiffness: 200, damping: 20 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 20 }}
           >
             <motion.div
               className="w-24 h-24 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full flex items-center justify-center mb-6 relative"
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{
-                type: "spring",
+                type: 'spring',
                 stiffness: 300,
                 damping: 20,
                 delay: 0.2,
@@ -1257,7 +1195,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 animate={{ scale: 1 }}
                 transition={{
                   delay: 0.5,
-                  type: "spring",
+                  type: 'spring',
                   stiffness: 500,
                   damping: 30,
                 }}
@@ -1278,7 +1216,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                   transition={{
                     duration: 1,
                     delay: 0.8 + i * 0.1,
-                    ease: "easeOut",
+                    ease: 'easeOut',
                   }}
                 />
               ))}
@@ -1290,7 +1228,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              {t("bookingConfirmedTitle")}
+              {t('bookingConfirmedTitle')}
             </motion.h2>
 
             <motion.p
@@ -1299,7 +1237,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
             >
-              {t("bookingConfirmedText")}
+              {t('bookingConfirmedText')}
             </motion.p>
 
             {bookingReference && (
@@ -1309,14 +1247,12 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{
                   delay: 0.8,
-                  type: "spring",
+                  type: 'spring',
                   stiffness: 300,
                   damping: 30,
                 }}
               >
-                <p className="text-sm text-gray-600 mb-2">
-                  {t("bookingReference")}
-                </p>
+                <p className="text-sm text-gray-600 mb-2">{t('bookingReference')}</p>
                 <motion.p
                   className="text-2xl font-mono font-bold text-gray-800"
                   initial={{ opacity: 0 }}
@@ -1334,52 +1270,45 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2 }}
             >
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   onClick={downloadConfirmation}
                   variant="outline"
                   className="flex-1 h-12 border-2 bg-transparent"
                 >
                   <Download className="w-4 h-4 mr-2" />
-                  {t("downloadConfirmation")}
+                  {t('downloadConfirmation')}
                 </Button>
               </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   onClick={shareBooking}
                   variant="outline"
                   className="flex-1 h-12 border-2 bg-transparent"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
-                  {t("shareBooking")}
+                  {t('shareBooking')}
                 </Button>
               </motion.div>
             </motion.div>
           </motion.div>
-        )
+        );
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   const isNextDisabled = () => {
     // ... без изменений
-    if (step === 1)
-      return !formData.checkIn || !formData.checkOut || nights <= 0
-    if (step === 2) return formData.selectedBedIds.length === 0
+    if (step === 1) return !formData.checkIn || !formData.checkOut || nights <= 0;
+    if (step === 2) return formData.selectedBedIds.length === 0;
     if (step === 3) {
-      const [isValid] = validateCurrentStepFields()
-      return !isValid
+      const [isValid] = validateCurrentStepFields();
+      return !isValid;
     }
-    if (step === 4) return !agreedToTerms || isPriceLoading // ИЗМЕНЕНО: Блокируем кнопку, пока цена грузится
-    return false
-  }
+    if (step === 4) return !agreedToTerms || isPriceLoading; // ИЗМЕНЕНО: Блокируем кнопку, пока цена грузится
+    return false;
+  };
 
   return (
     <motion.div
@@ -1394,16 +1323,13 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
         className="bg-white border-b border-gray-200 sticky top-0 z-10 backdrop-blur-sm bg-white/95"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               {onClose && (
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                   <Button variant="ghost" size="sm" onClick={onClose}>
                     <X className="w-4 h-4" />
                   </Button>
@@ -1415,7 +1341,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                {t("bookingTitle")}
+                {t('bookingTitle')}
               </motion.h1>
             </div>
             <motion.div
@@ -1424,16 +1350,13 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              {t("bookingSubtitle")}
+              {t('bookingSubtitle')}
             </motion.div>
           </div>
         </div>
       </motion.div>
 
-      <div
-        ref={pageTopRef}
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
-      >
+      <div ref={pageTopRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <motion.div
             className="lg:col-span-1"
@@ -1451,16 +1374,15 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               {/* ... (Карточка с информацией о комнате без изменений) */}
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               >
                 <Image
                   src={
-                    process.env.NEXT_PUBLIC_STATIC_ASSETS_URL +
-                      room.images[0] ||
-                    "/placeholder.svg?height=200&width=300&query=room interior" ||
-                    "/placeholder.svg" ||
-                    "/placeholder.svg" ||
-                    "/placeholder.svg"
+                    process.env.NEXT_PUBLIC_STATIC_ASSETS_URL + room.images[0] ||
+                    '/placeholder.svg?height=200&width=300&query=room interior' ||
+                    '/placeholder.svg' ||
+                    '/placeholder.svg' ||
+                    '/placeholder.svg'
                   }
                   alt={room.name}
                   width={300}
@@ -1473,10 +1395,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 <h3 className="font-bold text-lg text-gray-800">{room.name}</h3>
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-3 h-3 fill-yellow-400 text-yellow-400"
-                    />
+                    <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
               </div>
@@ -1487,9 +1406,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               </div>
 
               <div className="mb-4">
-                <h4 className="font-semibold text-sm text-gray-800 mb-2">
-                  Amenities
-                </h4>
+                <h4 className="font-semibold text-sm text-gray-800 mb-2">Amenities</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {roomAmenities.map((amenity, index) => (
                     <motion.div
@@ -1514,11 +1431,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                   transition={{ delay: 0.8 }}
                 >
                   <Calendar className="w-4 h-4 text-primary-600 flex-shrink-0" />
-                  <span>
-                    {nights > 0
-                      ? t("nights", { count: nights })
-                      : t("selectDates")}
-                  </span>
+                  <span>{nights > 0 ? t('nights', { count: nights }) : t('selectDates')}</span>
                 </motion.div>
                 {formData.selectedBedIds.length > 0 && (
                   <motion.div
@@ -1529,7 +1442,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                   >
                     <Users className="w-4 h-4 text-primary-600 flex-shrink-0" />
                     <span>
-                      {t("selectedBeds")}: {formData.selectedBedIds.length}
+                      {t('selectedBeds')}: {formData.selectedBedIds.length}
                     </span>
                   </motion.div>
                 )}
@@ -1547,9 +1460,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1 }}
                 >
-                  <span className="font-semibold text-gray-800">
-                    {t("total")}
-                  </span>
+                  <span className="font-semibold text-gray-800">{t('total')}</span>
 
                   <div className="flex flex-col items-end">
                     {hasDiscount && (
@@ -1560,19 +1471,19 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                         transition={{ delay: 0.4 }}
                       >
                         <span className="text-xs line-through text-gray-400">
-                          {new Intl.NumberFormat("ru-RU", {
+                          {new Intl.NumberFormat('ru-RU', {
                             minimumFractionDigits: 0,
                             maximumFractionDigits: 0,
                           }).format(discountData.originalPrice) +
-                            " " +
-                            t("currency")}
+                            ' ' +
+                            t('currency')}
                         </span>
                         <motion.span
                           className="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded font-bold"
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           transition={{
-                            type: "spring",
+                            type: 'spring',
                             stiffness: 400,
                             delay: 0.4,
                           }}
@@ -1588,27 +1499,23 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                         <Loader2 className="w-6 h-6 animate-spin text-primary-600" />
                       ) : (
                         <motion.span
-                          key={
-                            hasDiscount
-                              ? discountData.discountedPrice
-                              : totalPrice
-                          }
+                          key={hasDiscount ? discountData.discountedPrice : totalPrice}
                           initial={{ scale: 0.8 }}
                           animate={{ scale: 1 }}
                           transition={{
-                            type: "spring",
+                            type: 'spring',
                             stiffness: 500,
                             damping: 30,
                           }}
                         >
                           {hasDiscount
-                            ? new Intl.NumberFormat("ru-RU", {
+                            ? new Intl.NumberFormat('ru-RU', {
                                 minimumFractionDigits: 0,
                                 maximumFractionDigits: 0,
                               }).format(discountData.discountedPrice) +
-                              " " +
-                              t("currency")
-                            : formattedTotalPrice + " " + t("currency")}
+                              ' ' +
+                              t('currency')
+                            : formattedTotalPrice + ' ' + t('currency')}
                         </motion.span>
                       )}
                     </div>
@@ -1650,24 +1557,22 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                         >
                           <motion.div
                             className={cn(
-                              "w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-500 font-bold relative overflow-hidden",
+                              'w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-500 font-bold relative overflow-hidden',
                               step >= s.id
-                                ? "bg-primary-500 text-white" // Changed to white for better contrast with color background
-                                : "bg-gray-200 text-gray-500"
+                                ? 'bg-primary-500 text-white' // Changed to white for better contrast with color background
+                                : 'bg-gray-200 text-gray-500',
                             )}
                             style={{
                               background:
                                 step >= s.id
                                   ? `linear-gradient(135deg, ${s.color.replace(
-                                      "bg-",
-                                      ""
-                                    )}, ${s.color.replace("bg-", "")}dd)`
+                                      'bg-',
+                                      '',
+                                    )}, ${s.color.replace('bg-', '')}dd)`
                                   : undefined,
                             }}
                             whileHover={{ scale: 1.1 }}
-                            animate={
-                              step === s.id ? { scale: [1, 1.1, 1] } : {}
-                            }
+                            animate={step === s.id ? { scale: [1, 1.1, 1] } : {}}
                             transition={{ duration: 0.5 }}
                           >
                             {step > s.id ? (
@@ -1675,7 +1580,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                                 initial={{ scale: 0, rotate: -180 }}
                                 animate={{ scale: 1, rotate: 0 }}
                                 transition={{
-                                  type: "spring",
+                                  type: 'spring',
                                   stiffness: 500,
                                   damping: 30,
                                 }}
@@ -1685,17 +1590,17 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                             ) : (
                               <s.icon
                                 className={cn(
-                                  "w-4 h-4 sm:w-5 sm:h-5",
-                                  step >= s.id ? "text-white" : ""
+                                  'w-4 h-4 sm:w-5 sm:h-5',
+                                  step >= s.id ? 'text-white' : '',
                                 )}
                               />
                             )}
                           </motion.div>
                           <span
                             className={cn(
-                              "text-[10px] sm:text-sm font-medium text-center transition-colors duration-300",
-                              step >= s.id ? "text-gray-800" : "text-gray-500",
-                              "hidden sm:block"
+                              'text-[10px] sm:text-sm font-medium text-center transition-colors duration-300',
+                              step >= s.id ? 'text-gray-800' : 'text-gray-500',
+                              'hidden sm:block',
                             )}
                           >
                             {s.name}
@@ -1716,7 +1621,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                               initial={{ scaleX: 0 }}
                               animate={{ scaleX: step > s.id ? 1 : 0 }}
                               transition={{ duration: 0.5, delay: 0.2 }}
-                              style={{ transformOrigin: "left" }}
+                              style={{ transformOrigin: 'left' }}
                             />
                           </motion.div>
                         )}
@@ -1727,9 +1632,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
               )}
 
               <div className="p-6 min-h-[500px]">
-                <AnimatePresence mode="wait">
-                  {renderStepContent()}
-                </AnimatePresence>
+                <AnimatePresence mode="wait">{renderStepContent()}</AnimatePresence>
               </div>
 
               <motion.div
@@ -1739,42 +1642,23 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                 transition={{ delay: 0.8 }}
               >
                 {step < 5 ? (
-                  <div className="flex justify-between gap-4">
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Button
-                        variant="outline"
-                        onClick={handlePrevStep}
-                        disabled={step === 1}
-                        className="h-12 px-8 border-2 bg-transparent"
-                      >
-                        <ArrowLeft className="w-4 h-4 mr-2" /> {t("back")}
-                      </Button>
-                    </motion.div>
+                  <div className="w-full flex flex-col gap-2">
                     {step < 4 ? (
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
+                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                         <Button
                           onClick={handleNextStep}
                           disabled={isNextDisabled()}
-                          className="h-12 px-8"
+                          className="h-12 px-8 w-full"
                         >
-                          {t("next")} <ArrowRight className="w-4 h-4 ml-2" />
+                          {t('next')} <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
                       </motion.div>
                     ) : (
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
+                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                         <Button
                           onClick={handleSubmit}
                           disabled={createBooking.isPending || isNextDisabled()}
-                          className="h-12 px-8 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+                          className="h-12 px-8 w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
                         >
                           {createBooking.isPending && (
                             <motion.div
@@ -1782,28 +1666,34 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
                               transition={{
                                 duration: 1,
                                 repeat: Number.POSITIVE_INFINITY,
-                                ease: "linear",
+                                ease: 'linear',
                               }}
                             >
                               <Loader2 className="w-4 h-4 mr-2" />
                             </motion.div>
                           )}
-                          {t("confirmAndBook")}
+                          {t('confirmAndBook')}
                         </Button>
                       </motion.div>
                     )}
+
+                    {/* Кнопка Назад всегда ниже */}
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button
+                        variant="outline"
+                        onClick={handlePrevStep}
+                        disabled={step === 1}
+                        className="h-12 px-8 w-full"
+                      >
+                        <ArrowLeft className="w-4 h-4 mr-2" /> {t('back')}
+                      </Button>
+                    </motion.div>
                   </div>
                 ) : (
                   <div className="flex justify-center">
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Button
-                        onClick={() => router.push("/")}
-                        className="h-12 px-8"
-                      >
-                        {t("close")}
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button onClick={() => router.push('/')} className="h-12 px-8">
+                        {t('close')}
                       </Button>
                     </motion.div>
                   </div>
@@ -1814,5 +1704,5 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
         </div>
       </div>
     </motion.div>
-  )
+  );
 }
