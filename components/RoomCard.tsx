@@ -19,7 +19,6 @@ import {
   EyeIcon,
 } from "lucide-react"
 import Image from "next/image"
-import { BookingFlow } from "@/components/booking/BookingFlow"
 
 interface RoomCardProps {
   room: Room

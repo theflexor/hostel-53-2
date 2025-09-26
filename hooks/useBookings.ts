@@ -58,6 +58,7 @@ export const useCreateBooking = () => {
         endTime: bookingData.checkOut,
         comments: bookingData.specialRequests,
         bunkIds: bookingData.selectedBedIds,
+        price: bookingData.price, // 🔁 Добавлено поле price
       }
 
       return await bookBeds(payload)
