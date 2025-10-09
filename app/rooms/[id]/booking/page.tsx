@@ -5,15 +5,6 @@ import { useRoom } from "@/hooks/useRooms"
 import { useParams } from "next/navigation"
 import { Toaster } from "sonner"
 
-const mockRoom = {
-  id: "room-123",
-  name: "Cozy Mountain Cabin",
-  categoryName: "Premium Suite • Mountain View",
-  price: 150,
-  capacity: 4,
-  images: ["/placeholder.svg?height=200&width=300"],
-}
-
 export default function HomePage() {
   const params = useParams()
   const id = Number(params.id)
