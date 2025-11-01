@@ -5,8 +5,6 @@ import React, { useState, useMemo, useEffect, useCallback, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { DateRangePicker } from "@/components/DateRangePicker"
-import { useLanguage } from "@/hooks/useLanguage"
-import { useTranslation } from "@/lib/i18n"
 import { useCalculatePrice, useCreateBooking } from "@/hooks/useBookings"
 import type { Room } from "@/lib/types"
 import {
@@ -42,6 +40,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { useBeds } from "@/hooks/useBeds"
 import { useRouter } from "next/navigation"
+import { useTranslation } from "react-i18next"
 // ДОБАВЛЕНО: Импортируем хук для расчета цены
 
 export interface Bed {
@@ -134,8 +133,7 @@ const staggerItem = {
 export function BookingPage({ room, onClose }: BookingPageProps) {
   const router = useRouter()
   const pageTopRef = useRef(null)
-  const { language } = useLanguage()
-  const { t } = useTranslation(language)
+  const { t, i18n } = useTranslation()
   const createBooking = useCreateBooking()
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
@@ -145,6 +143,8 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
     phone: "",
     selectedBedIds: [] as number[],
     specialRequests: "",
+    checkIn: "",
+    checkOut: "",
   })
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
   const [agreedToTerms, setAgreedToTerms] = useState(false)
@@ -204,11 +204,21 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
     const priceToFormat = hasDiscount
       ? discountData.discountedPrice
       : totalPrice
-    return new Intl.NumberFormat(language === "en" ? "en-US" : "ru-RU", {
+
+    // маппинг языков i18next → локали Intl
+    const localeMap: Record<string, string> = {
+      en: "en-US",
+      ru: "ru-RU",
+      ky: "ky-KG",
+    }
+
+    const locale = localeMap[i18n.language] || "en-US"
+
+    return new Intl.NumberFormat(locale, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(priceToFormat)
-  }, [totalPrice, discountData, hasDiscount, language])
+  }, [totalPrice, discountData, hasDiscount, i18n.language])
 
   useEffect(() => {
     setFormData((prev) => ({ ...prev, selectedBedIds: [] }))
@@ -370,7 +380,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
         phone: formData.phone,
         selectedBedIds: formData.selectedBedIds,
         roomId: room.id,
-        checkIn: checkOutWithTime.toISOString(),
+        checkIn: checkInWithTime.toISOString(),
         checkOut: checkOutWithTime.toISOString(),
         specialRequests: formData.specialRequests,
         price: serverCalculatedPrice?.discountedPrice,

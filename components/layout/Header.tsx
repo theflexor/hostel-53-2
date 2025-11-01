@@ -1,11 +1,11 @@
 "use client"
+
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { LanguageSwitcher } from "@/components/LanguageSwitcher"
-import { useTranslation } from "@/lib/i18n"
 import {
   MenuIcon,
   XIcon,
@@ -16,11 +16,14 @@ import {
   BedIcon,
   StarIcon,
 } from "lucide-react"
-import { useLanguage } from "@/hooks/useLanguage"
+import { useTranslation } from "react-i18next"
+import { usePaths } from "@/lib/routes"
 
 export function Header() {
-  const { language } = useLanguage()
-  const { t } = useTranslation(language)
+  const lang = useParams().lang as string
+  const paths = usePaths()
+
+  const { t } = useTranslation()
   const pathname = usePathname()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -39,11 +42,11 @@ export function Header() {
   }, [pathname])
 
   const navLinks = [
-    { href: "/", labelKey: "home", icon: HomeIcon },
-    { href: "/gallery", labelKey: "gallery", icon: ImageIcon },
-    { href: "/reviews", labelKey: "reviews", icon: StarIcon },
-    { href: "/about", labelKey: "about", icon: InfoIcon },
-    { href: "/contact", labelKey: "contact", icon: MailIcon },
+    { href: paths.home, labelKey: "home", icon: HomeIcon },
+    { href: paths.gallery, labelKey: "gallery", icon: ImageIcon },
+    { href: paths.reviews, labelKey: "reviews", icon: StarIcon },
+    { href: paths.about, labelKey: "about", icon: InfoIcon },
+    { href: paths.contact, labelKey: "contact", icon: MailIcon },
   ]
 
   return (
@@ -55,7 +58,7 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <Link
-            href="/"
+            href={paths.home}
             className="text-3xl font-extrabold text-primary-600 hover:text-primary-700 transition-colors"
           >
             Hostel 53
@@ -74,9 +77,7 @@ export function Header() {
                 }`}
               >
                 <link.icon className="h-4 w-4" />
-                {t(
-                  link.labelKey as keyof ReturnType<typeof useTranslation>["t"]
-                )}
+                {t(link.labelKey)}
               </Link>
             ))}
           </nav>
@@ -116,9 +117,7 @@ export function Header() {
                 }`}
               >
                 <link.icon className="h-5 w-5" />
-                {t(
-                  link.labelKey as keyof ReturnType<typeof useTranslation>["t"]
-                )}
+                {t(link.labelKey)}
               </Link>
             ))}
             <Separator />
@@ -128,7 +127,7 @@ export function Header() {
                 asChild
                 className="bg-primary-gradient text-white rounded-xl"
               >
-                <Link href="/#booking">
+                <Link href={paths.book}>
                   <BedIcon className="h-4 w-4 mr-2" />
                   {t("book")}
                 </Link>

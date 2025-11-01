@@ -1,11 +1,9 @@
 "use client"
 
-import { useLanguage } from "@/hooks/useLanguage"
-import { useTranslation } from "@/lib/i18n"
+import { useTranslation } from "react-i18next"
 
 export function PrivacyPolicyPage() {
-  const { language } = useLanguage()
-  const { t } = useTranslation(language)
+  const { t } = useTranslation()
 
   return (
     <div className="py-16 bg-white min-h-screen">

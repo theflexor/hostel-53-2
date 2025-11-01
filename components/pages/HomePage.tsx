@@ -14,7 +14,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { RoomCard } from "@/components/RoomCard"
 import { DateRangePicker } from "@/components/DateRangePicker"
-import { useTranslation } from "@/lib/i18n"
 import { useRooms, type Room } from "@/hooks/useRooms"
 import {
   ChevronLeftIcon,
@@ -41,9 +40,9 @@ import {
 import Image from "next/image"
 import Link from "next/link"
 import { mockRooms } from "@/lib/mockData"
-import { useLanguage } from "@/hooks/useLanguage"
 import { get } from "http"
 import { heroKitchenImage, heroMainImage, heroOutsideImage } from "@/public"
+import { useTranslation } from "react-i18next"
 
 const carouselImages = [
   {
@@ -83,8 +82,7 @@ const FloatingParticles = () => {
 }
 
 export function HomePage() {
-  const { language } = useLanguage()
-  const { t } = useTranslation(language)
+  const { t } = useTranslation()
 
   const [carouselIndex, setCarouselIndex] = useState(0)
   const [isSearching, setIsSearching] = useState(false)

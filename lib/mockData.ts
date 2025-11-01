@@ -1,4 +1,4 @@
-import type { Room, RawRoomData, BookingData, Review } from "@/lib/types"
+import type { Room, RawRoomData, BookingData } from "@/lib/types"
 
 // The raw data you provided, now with local image paths
 const rawRoomsData: RawRoomData[] = [
@@ -87,7 +87,11 @@ const rawRoomsData: RawRoomData[] = [
     categoryId: 3,
     categoryName: "4-х местный для мужчин",
     amenities: ["Индивидуальные розетки", "Wi-Fi", "Лампы для чтения"],
-    pictureUrls: ["/images/rooms/male-4-bed/1.png", "/images/rooms/male-4-bed/2.png", "/images/rooms/male-4-bed/3.png"],
+    pictureUrls: [
+      "/images/rooms/male-4-bed/1.png",
+      "/images/rooms/male-4-bed/2.png",
+      "/images/rooms/male-4-bed/3.png",
+    ],
   },
 ]
 
@@ -104,7 +108,9 @@ const adaptRoomData = (rawData: RawRoomData): Room => {
     id: rawData.id,
     name: rawData.title,
     description: rawData.description,
-    price: rawData.price ?? (rawData.capacity <= 4 ? 1200 : rawData.capacity <= 6 ? 1100 : 1000),
+    price:
+      rawData.price ??
+      (rawData.capacity <= 4 ? 1200 : rawData.capacity <= 6 ? 1100 : 1000),
     images: rawData.pictureUrls, // Use paths directly
     amenities: rawData.amenities,
     capacity: rawData.capacity,

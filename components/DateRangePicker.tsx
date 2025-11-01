@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { useLanguage } from "@/hooks/useLanguage"
+import { useTranslation } from "react-i18next"
 
 interface DateRangePickerProps {
   onDateRangeChange: (range: { from?: string; to?: string }) => void
@@ -25,7 +25,8 @@ export function DateRangePicker({
   onDateRangeChange,
   className,
 }: DateRangePickerProps) {
-  const { language } = useLanguage()
+  const { i18n } = useTranslation()
+  const language = i18n.language
   const [date, setDate] = React.useState<DateRange | undefined>()
   const [isOpen, setIsOpen] = React.useState(false)
 
@@ -34,9 +35,7 @@ export function DateRangePicker({
       setDate(newDate)
 
       const formatToDateTime = (date?: Date) =>
-        date
-          ? date.toISOString().slice(0, 19) // убираем миллисекунды и 'Z'
-          : undefined
+        date ? date.toISOString().slice(0, 19) : undefined
 
       onDateRangeChange({
         from: formatToDateTime(newDate?.from),
@@ -51,7 +50,7 @@ export function DateRangePicker({
   )
 
   const formatDate = (date: Date) => {
-    const locale = language === "ru" ? ru : language === "ky" ? ru : enUS
+    const locale = language === "ru" || language === "ky" ? ru : enUS
     return format(date, "dd MMM yyyy", { locale })
   }
 
@@ -147,7 +146,7 @@ export function DateRangePicker({
             onSelect={handleDateSelect}
             numberOfMonths={2}
             disabled={(date) => date < new Date()}
-            locale={language === "ru" ? ru : language === "ky" ? ru : enUS}
+            locale={language === "ru" || language === "ky" ? ru : enUS}
             className="rounded-md"
             classNames={{
               months:

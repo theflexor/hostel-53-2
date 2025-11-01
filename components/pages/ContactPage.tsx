@@ -11,8 +11,6 @@ import {
 } from "@/components/ui/select"
 import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
-import { useLanguage } from "@/hooks/useLanguage"
-import { useTranslation } from "@/lib/i18n"
 import { useForm, Controller } from "react-hook-form"
 import {
   MapPin,
@@ -24,6 +22,9 @@ import {
   FacebookIcon,
 } from "lucide-react"
 import Link from "next/link"
+import { useTranslation } from "react-i18next"
+import { useState } from "react"
+import { sendContactMessage } from "@/lib/api"
 
 interface ContactFormData {
   firstName: string
@@ -35,8 +36,9 @@ interface ContactFormData {
 }
 
 export function ContactPage() {
-  const { language } = useLanguage()
-  const { t } = useTranslation(language)
+  const { t } = useTranslation()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const { control, handleSubmit, reset } = useForm<ContactFormData>({
     defaultValues: {
@@ -49,10 +51,22 @@ export function ContactPage() {
     },
   })
 
-  const onSubmit = (data: ContactFormData) => {
-    console.log("Contact form submitted:", data)
-    alert(t("bookingConfirmedText"))
-    reset()
+  const onSubmit = async (data: ContactFormData) => {
+    setIsSubmitting(true)
+    setSubmitError(null)
+
+    try {
+      await sendContactMessage(data)
+      alert(t("bookingConfirmedText"))
+      reset()
+    } catch (error) {
+      console.error("Failed to send contact message:", error)
+      setSubmitError(
+        error instanceof Error ? error.message : "Failed to send message"
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -82,11 +96,7 @@ export function ContactPage() {
                       <p className="text-gray-600">
                         {t("addressValue")}
                         <br />
-                        {language === "en"
-                          ? "Bishkek, Kyrgyzstan"
-                          : language === "ru"
-                          ? "Бишкек, Кыргызстан"
-                          : "Бишкек, Кыргызстан"}
+                        <p>{t("location")}</p>
                       </p>
                     </div>
                   </div>
@@ -173,6 +183,11 @@ export function ContactPage() {
               <h2 className="text-2xl font-bold text-gray-800 mb-6">
                 {t("sendMessage")}
               </h2>
+              {submitError && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-600 text-sm">
+                  {submitError}
+                </div>
+              )}
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -258,8 +273,11 @@ export function ContactPage() {
                 <Button
                   type="submit"
                   className="w-full bg-primary-600 hover:bg-primary-700 text-white"
+                  disabled={isSubmitting}
                 >
-                  {t("sendMessage")}
+                  {isSubmitting
+                    ? t("sending") || "Sending..."
+                    : t("sendMessage")}
                 </Button>
               </form>
             </Card>
@@ -280,3 +298,5 @@ export function ContactPage() {
     </div>
   )
 }
+
+export default ContactPage

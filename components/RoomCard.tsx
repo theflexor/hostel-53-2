@@ -6,8 +6,6 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { useLanguage } from "@/hooks/useLanguage"
-import { useTranslation } from "@/lib/i18n"
 import type { Room } from "@/lib/types"
 import {
   HeartIcon,
@@ -19,6 +17,9 @@ import {
   EyeIcon,
 } from "lucide-react"
 import Image from "next/image"
+import { useTranslation } from "react-i18next"
+import { useParams } from "next/navigation"
+import { usePaths } from "@/lib/routes"
 
 interface RoomCardProps {
   room: Room
@@ -27,8 +28,9 @@ interface RoomCardProps {
 const staticUrl = process.env.NEXT_PUBLIC_STATIC_ASSETS_URL || ""
 
 export function RoomCard({ room }: RoomCardProps) {
-  const { language } = useLanguage()
-  const { t } = useTranslation(language)
+  const lang = useParams().lang as string
+  const paths = usePaths()
+  const { t } = useTranslation()
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   // const [isLiked, setIsLiked] = useState(false)
 
@@ -61,7 +63,7 @@ export function RoomCard({ room }: RoomCardProps) {
 
   return (
     <Card className="group overflow-hidden hover:shadow-luxury transition-all duration-700 transform hover:-translate-y-2 sm:hover:-translate-y-3 bg-card-gradient border-0 rounded-2xl sm:rounded-3xl hover:shadow-primary-glow/20 relative">
-      <Link href={`/rooms/${room.id}`} className="block">
+      <Link href={paths.roomsId(room.id)} className="block">
         <div className="relative h-48 sm:h-64 overflow-hidden">
           <Image
             src={
@@ -132,7 +134,7 @@ export function RoomCard({ room }: RoomCardProps) {
       </Link>
 
       <div className="p-4 sm:p-6">
-        <Link href={`/rooms/${room.id}`} className="block">
+        <Link href={paths.roomsId(room.id)} className="block">
           <div className="flex justify-between items-start mb-2 sm:mb-3">
             <h3 className="text-base sm:text-lg font-bold text-gray-800 leading-tight group-hover:text-primary-600 transition-colors duration-300 flex-1 pr-2 sm:pr-3 line-clamp-2">
               {room.name}
@@ -187,12 +189,12 @@ export function RoomCard({ room }: RoomCardProps) {
               size="sm"
               className="rounded-lg sm:rounded-xl border-primary-200 text-primary-600 hover:bg-primary-50 bg-transparent transition-all duration-300 hover:scale-105 text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-2 h-7 sm:h-auto"
             >
-              <Link href={`/rooms/${room.id}`}>
+              <Link href={paths.roomsId(room.id)}>
                 <EyeIcon className="h-3 w-3 sm:h-4 sm:w-4 mr-1.5" />
                 {t("viewDetails")}
               </Link>
             </Button>
-            <Link href={`/rooms/${room.id}/booking`}>
+            <Link href={paths.roomBooking(room.id)}>
               <Button
                 size="sm"
                 className="bg-primary-gradient hover:shadow-lg text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-300 hover:scale-105 text-xs sm:text-sm px-2 py-1 sm:px-4 sm:py-2 h-7 sm:h-auto"

@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { useLanguage } from "@/hooks/useLanguage"
-import { useTranslation } from "@/lib/i18n"
 import { config } from "@/lib/config"
 import type { Room } from "@/lib/types"
 import {
@@ -26,6 +24,8 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useTranslation } from "react-i18next"
+import { usePaths } from "@/lib/routes"
 
 interface RoomDetailsPageProps {
   room: Room
@@ -34,9 +34,9 @@ interface RoomDetailsPageProps {
 const staticUrl = process.env.NEXT_PUBLIC_STATIC_ASSETS_URL || ""
 
 export function RoomDetailsPage({ room }: RoomDetailsPageProps) {
-  const { language } = useLanguage()
-  const { t } = useTranslation(language)
+  const { t } = useTranslation()
   const router = useRouter()
+  const paths = usePaths()
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   // const [isLiked, setIsLiked] = useState(false)
@@ -243,7 +243,7 @@ export function RoomDetailsPage({ room }: RoomDetailsPageProps) {
                     </div>
                     <div className="text-gray-500">{t("perNight")}</div>
                   </div>
-                  <Link href={`/rooms/${room.id}/booking`}>
+                  <Link href={paths.roomBooking(room.id)}>
                     <Button className="w-full bg-primary-gradient hover:shadow-lg text-white py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 mb-4">
                       {t("bookNow")}
                     </Button>

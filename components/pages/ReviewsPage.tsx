@@ -15,16 +15,15 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { useLanguage } from "@/hooks/useLanguage"
-import { useTranslation } from "@/lib/i18n"
+// @ts-ignore
 import { mockReviews, type Review } from "@/lib/mockData"
 import { Star, Quote, PlusCircle, Send } from "lucide-react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
+import { useTranslation } from "react-i18next"
 
 export function ReviewsPage() {
-  const { language } = useLanguage()
-  const { t } = useTranslation(language)
+  const { t } = useTranslation()
   const [reviews, setReviews] = useState<Review[]>(mockReviews)
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
   const [newReview, setNewReview] = useState({
