@@ -20,25 +20,20 @@ import {
   CheckIcon,
   InstagramIcon,
   FacebookIcon,
+  CheckCircle2,
+  X,
 } from "lucide-react"
 import Link from "next/link"
 import { useTranslation } from "react-i18next"
 import { useState } from "react"
+import type { ContactFormData } from "@/lib/types"
 import { sendContactMessage } from "@/lib/api"
-
-interface ContactFormData {
-  firstName: string
-  lastName: string
-  phone: string
-  email: string
-  subject: string
-  message: string
-}
 
 export function ContactPage() {
   const { t } = useTranslation()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const { control, handleSubmit, reset } = useForm<ContactFormData>({
     defaultValues: {
@@ -54,11 +49,13 @@ export function ContactPage() {
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true)
     setSubmitError(null)
+    setShowSuccess(false)
 
     try {
       await sendContactMessage(data)
-      alert(t("bookingConfirmedText"))
+      setShowSuccess(true)
       reset()
+      setTimeout(() => setShowSuccess(false), 5000)
     } catch (error) {
       console.error("Failed to send contact message:", error)
       setSubmitError(
@@ -73,6 +70,35 @@ export function ContactPage() {
     <div className="py-16 bg-gray-50 min-h-screen">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
+          {showSuccess && (
+            <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-5 duration-300">
+              <Card className="p-6 bg-green-50 border-green-200 shadow-lg max-w-md">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
+                      <CheckCircle2 className="h-7 w-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-green-900 mb-1">
+                      {t("sended") || "Сообщение отправлено!"}
+                    </h3>
+                    <p className="text-sm text-green-700">
+                      {t("contactSuccessMessage") ||
+                        "Мы свяжемся с вами в ближайшее время"}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowSuccess(false)}
+                    className="flex-shrink-0 text-green-600 hover:text-green-800 transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+              </Card>
+            </div>
+          )}
+
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
               {t("contactTitle")}
@@ -96,7 +122,7 @@ export function ContactPage() {
                       <p className="text-gray-600">
                         {t("addressValue")}
                         <br />
-                        <p>{t("location")}</p>
+                        <span>{t("location")}</span>
                       </p>
                     </div>
                   </div>

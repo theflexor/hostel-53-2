@@ -161,10 +161,118 @@ type ContactMessagePayload = {
   message: string
 }
 
-export async function sendContactMessage(
-  payload: ContactMessagePayload
+interface Review {
+  id: number
+  createdAt: string
+  updatedAt: string
+  name: string
+  email: string
+  rating: number
+  comment: string
+}
+
+interface ReviewRequestPayload {
+  name: string
+  email: string
+  rating: number
+  comment: string
+}
+
+export async function fetchAllReviews(): Promise<Review[]> {
+  const response = await fetch(`${API_BASE_URL}/reviews`)
+
+  if (!response.ok) {
+    const errorBody = await response.text()
+    console.error("Failed to fetch all reviews:", errorBody)
+    throw new Error("Failed to fetch all reviews")
+  }
+
+  const reviews: Review[] = await response.json()
+  return reviews
+}
+
+export async function submitReviewByToken(
+  token: string,
+  payload: ReviewRequestPayload
 ): Promise<void> {
-  const response = await fetch(`${API_BASE_URL}/contact`, {
+  const response = await fetch(`${API_BASE_URL}/reviews/by-token/${token}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    console.error(`Failed to submit review with token ${token}:`, errorText)
+    throw new Error("Review submission failed")
+  }
+
+  console.log("Review submitted successfully")
+  // The API returns a string on success, we just resolve the promise
+}
+
+export async function validateReviewToken(token: string): Promise<boolean> {
+  const response = await fetch(
+    `${API_BASE_URL}/reviews/validate?token=${token}`
+  )
+
+  if (!response.ok) {
+    // If the server returns a non-200 status, it might be an invalid token
+    // or a server error. We'll log the error and assume false unless explicitly true.
+    const errorText = await response.text()
+    console.error("Failed to validate token:", errorText)
+    // The API returns a boolean in the response body, but let's check the status as well.
+    return false
+  }
+
+  // The response content is a boolean, as per the OpenAPI spec
+  const isValid: boolean = await response.json()
+  return isValid
+}
+
+export async function deleteReview(id: number): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/reviews/${id}`, {
+    method: "DELETE",
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    console.error(`Failed to delete review with id ${id}:`, errorText)
+    throw new Error(`Failed to delete review with id ${id}`)
+  }
+
+  console.log(`Review with id ${id} deleted successfully`)
+}
+
+// Предполагаемые типы, если они не импортированы
+type ContactMessageDto = {
+  firstName: string
+  lastName: string
+  phone: string
+  email?: string
+  subject?: string
+  message: string
+}
+
+type ContactMessage = {
+  id: number
+  firstName: string
+  lastName: string
+  phone: string
+  email: string
+  subject: string
+  message: string
+}
+
+// 1. Отправляет новое контактное сообщение (POST)
+export async function sendContactMessage(
+  payload: ContactMessageDto
+): Promise<void> {
+  const url = `${API_BASE_URL}/contact`
+
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -175,8 +283,42 @@ export async function sendContactMessage(
   if (!response.ok) {
     const errorText = await response.text()
     console.error("Failed to send contact message:", errorText)
-    throw new Error("Contact message request failed")
+    throw new Error(`Contact message request failed: ${errorText}`)
   }
 
+  // API возвращает ContactMessage, но функция завершается успешно
   console.log("Contact message sent successfully")
+}
+
+// 2. Получает все контактные сообщения (GET)
+export async function getAllContactMessages(): Promise<ContactMessage[]> {
+  const url = `${API_BASE_URL}/contact`
+
+  const response = await fetch(url)
+
+  if (!response.ok) {
+    const errorBody = await response.text()
+    console.error("Failed to fetch all contact messages:", errorBody)
+    throw new Error("Failed to fetch all contact messages")
+  }
+
+  const messages: ContactMessage[] = await response.json()
+  return messages
+}
+
+// 3. Удаляет сообщение по ID (DELETE)
+export async function deleteContactMessage(id: number): Promise<void> {
+  const url = `${API_BASE_URL}/contact/${id}`
+
+  const response = await fetch(url, {
+    method: "DELETE",
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    console.error(`Failed to delete contact message with id ${id}:`, errorText)
+    throw new Error(`Failed to delete contact message with id ${id}`)
+  }
+
+  console.log(`Contact message with id ${id} deleted successfully`)
 }

@@ -268,5 +268,8 @@
       "q": "Can I store my luggage?",
       "a": "Yes, we offer free luggage storage for our guests both before check-in and after check-out."
     }
-  ]
+  ],
+  "sending": "Sending...",
+  "contactSuccessMessage": "We will contact you shortly",
+  "sended": "Message sent!"
 }
