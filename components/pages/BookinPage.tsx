@@ -182,8 +182,6 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
     formData.checkOut
   )
 
-  console.log(serverCalculatedPrice)
-
   const discountData = serverCalculatedPrice || {
     originalPrice: 0,
     discountedPrice: 0,
