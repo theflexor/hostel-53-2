@@ -42,7 +42,7 @@ const fetchMockBookings = async (email?: string): Promise<BookingData[]> => {
 }
 
 // Create booking
-export const useCreateBooking = () => {
+export const useCreateBooking = (lang: string) => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -61,7 +61,7 @@ export const useCreateBooking = () => {
         price: bookingData.price, // 🔁 Добавлено поле price
       }
 
-      return await bookBeds(payload)
+      return await bookBeds(payload, lang)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bookings"] })

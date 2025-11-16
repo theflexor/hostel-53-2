@@ -134,7 +134,8 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
   const router = useRouter()
   const pageTopRef = useRef(null)
   const { t, i18n } = useTranslation()
-  const createBooking = useCreateBooking()
+  console.log(i18n.language)
+  const createBooking = useCreateBooking(i18n.language)
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
     firstName: "",

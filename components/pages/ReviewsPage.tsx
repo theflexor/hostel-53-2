@@ -198,9 +198,6 @@ export function ReviewsPage() {
                 <div className="flex my-2">
                   {renderStars(overallStats.average)}
                 </div>
-                <p className="text-gray-500">
-                  {t("basedOn")} {overallStats.total} {t("reviews")}
-                </p>
               </div>
               <div className="col-span-2 space-y-2">
                 <h3 className="text-lg font-semibold text-center mb-4">
@@ -233,14 +230,18 @@ export function ReviewsPage() {
           </Card>
 
           <div className="text-center mb-12">
-            <Button
-              size="lg"
-              onClick={() => setIsReviewModalOpen(true)}
-              className="rounded-full shadow-lg"
-            >
-              <PlusCircle className="mr-2 h-5 w-5" />
-              {t("addReview")}
-            </Button>
+            {token && (
+              <div className="text-center mb-12">
+                <Button
+                  size="lg"
+                  onClick={() => setIsReviewModalOpen(true)}
+                  className="rounded-full shadow-lg"
+                >
+                  <PlusCircle className="mr-2 h-5 w-5" />
+                  {t("addReview")}
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Loading, Error, and Reviews List */}
@@ -278,13 +279,13 @@ export function ReviewsPage() {
                     <Card className="h-full flex flex-col bg-white shadow-soft hover:shadow-xl transition-shadow duration-300 rounded-2xl">
                       <CardContent className="p-6 flex flex-col flex-grow">
                         <div className="flex items-center gap-4 mb-4">
-                          <Image
+                          {/* <Image
                             src={getAvatarPlaceholder(review.name)}
                             alt={review.name}
                             width={48}
                             height={48}
                             className="rounded-full"
-                          />
+                          /> */}
                           <div>
                             <h3 className="font-bold text-gray-800">
                               {review.name}
@@ -334,7 +335,7 @@ export function ReviewsPage() {
               />
             </div>
             <div>
-              <Label htmlFor="email">{t("yourEmail")}</Label>
+              <Label htmlFor="email">{t("email")}</Label>
               <Input
                 id="email"
                 type="email"

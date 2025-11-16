@@ -103,11 +103,21 @@ export async function fetchBedsById({
   return data
 }
 
-export async function bookBeds(payload: BookingPayload): Promise<void> {
+export async function bookBeds(
+  payload: BookingPayload,
+  lang: string
+): Promise<void> {
+  const langs: Record<string, string> = {
+    kg: "kg-KG",
+    ru: "ru-RU",
+    en: "en-US",
+  }
+
   const response = await fetch(`${API_BASE_URL}/bookings/create-booking`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Accept-Language": langs[lang] || "en-US",
     },
     body: JSON.stringify(payload),
   })
