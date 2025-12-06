@@ -225,3 +225,15 @@ reviews:
             suggestion: ''
             type: approve
             time: '2025-11-16T10:45:27.467Z'
+  firstName_placeholder:
+    locales:
+      en:
+        comments:
+          - user:
+              name: theflexor
+              email: nurdanokenov@gmail.com
+            id: k4JGza5KuoFmgBo3BwLP6
+            type: request_change
+            comment: |
+              hello
+            time: '2025-12-03T12:39:32.222Z'
