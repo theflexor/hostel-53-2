@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
 
   // Редирект с корня на /en
   if (pathname === "/") {
-    return NextResponse.redirect(new URL("/en", request.url))
+    return NextResponse.redirect(new URL("/ru", request.url))
   }
 
   // Удаляем начальные и конечные слэши, разбиваем путь
@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
 
   // Если первый сегмент не язык — редиректим
   if (!locales.includes(lang)) {
-    return NextResponse.redirect(new URL("/en", request.url))
+    return NextResponse.redirect(new URL("/ru", request.url))
   }
 
   return NextResponse.next()
