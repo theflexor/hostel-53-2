@@ -66,6 +66,10 @@ interface CreateBookingData {
   checkOut: string
   specialRequests: string
   price: number | undefined
+  discountPercentage?: number
+  discountAmount?: number
+  originalPrice?: number
+  discountedPrice?: number
 }
 
 interface BookingPageProps {
@@ -371,6 +375,7 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
 
       const checkOutWithTime = new Date(formData.checkOut)
       checkOutWithTime.setHours(18, 0, 0, 0)
+      console.log(serverCalculatedPrice)
 
       const bookingData: CreateBookingData = {
         firstName: formData.firstName,
@@ -383,7 +388,12 @@ export function BookingPage({ room, onClose }: BookingPageProps) {
         checkOut: checkOutWithTime.toISOString(),
         specialRequests: formData.specialRequests,
         price: serverCalculatedPrice?.discountedPrice,
+        discountPercentage: serverCalculatedPrice?.discountPercentage,
+        discountAmount: serverCalculatedPrice?.discountAmount,
+        originalPrice: serverCalculatedPrice?.originalPrice,
+        discountedPrice: serverCalculatedPrice?.discountedPrice,
       }
+      console.log(bookingData)
 
       await createBooking.mutateAsync(bookingData)
 

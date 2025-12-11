@@ -48,6 +48,7 @@ export const useCreateBooking = (lang: string) => {
   return useMutation({
     mutationFn: async (bookingData: CreateBookingData) => {
       const payload = {
+        ...bookingData,
         firstName: bookingData.firstName,
         lastName: bookingData.lastName,
         email: bookingData.email,
@@ -59,6 +60,7 @@ export const useCreateBooking = (lang: string) => {
         comments: bookingData.specialRequests,
         bunkIds: bookingData.selectedBedIds,
         price: bookingData.price, // 🔁 Добавлено поле price
+        bookingSource: "WEBSITE",
       }
 
       return await bookBeds(payload, lang)
