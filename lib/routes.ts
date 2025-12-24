@@ -1,7 +1,7 @@
 import { useParams } from "next/navigation"
 
 export const usePaths = () => {
-  const lg = useParams().lang as string
+  const lg = (useParams().lang as string) || "ru"
   const base = `/${lg}`
 
   return {

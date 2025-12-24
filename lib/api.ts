@@ -108,7 +108,7 @@ export async function bookBeds(
   lang: string
 ): Promise<void> {
   const langs: Record<string, string> = {
-    kg: "kg-KG",
+    ky: "ky-KG",
     ru: "ru-RU",
     en: "en-US",
   }

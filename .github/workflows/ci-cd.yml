@@ -12,7 +12,7 @@ on:
 
 env:
   DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/hostel-app
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
 
 jobs:
   # ====================
@@ -30,7 +30,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'yarn'
+          cache: "yarn"
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -85,6 +85,10 @@ jobs:
           cache-from: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache
           cache-to: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache,mode=max
           platforms: linux/amd64
+          # 👇 ВАЖНО: Передаем переменные для сборки Next.js 👇
+          build-args: |
+            NEXT_PUBLIC_API_BASE_URL=https://hostel53bishkekkg.com/api/v1
+            NEXT_PUBLIC_STATIC_ASSETS_URL=https://hostel53bishkekkg.com
 
   # ====================
   # Deploy to Server
