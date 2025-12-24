@@ -54,6 +54,16 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/static ./.next/static
 
+# Debug: List files to verify structure (will be visible in build logs)
+RUN echo "=== Listing /app structure ===" && \
+    ls -la /app && \
+    echo "=== Listing /app/.next ===" && \
+    ls -la /app/.next && \
+    echo "=== Listing /app/.next/static ===" && \
+    ls -la /app/.next/static && \
+    echo "=== Listing /app/public ===" && \
+    ls -la /app/public
+
 # Set correct permissions
 RUN chown -R nextjs:nodejs /app
 
