@@ -63,17 +63,37 @@ const carouselImages = [
 ]
 
 const FloatingParticles = () => {
+  const [particles, setParticles] = useState<
+    {
+      left: string
+      top: string
+      delay: string
+      duration: string
+    }[]
+  >([])
+
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: 15 }).map(() => ({
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        delay: `${Math.random() * 4}s`,
+        duration: `${4 + Math.random() * 4}s`,
+      }))
+    )
+  }, [])
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {Array.from({ length: 15 }).map((_, i) => (
+      {particles.map((p, i) => (
         <div
           key={i}
           className="absolute w-1 h-1 sm:w-2 sm:h-2 bg-primary-400/30 rounded-full animate-float-slow"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 4}s`,
-            animationDuration: `${4 + Math.random() * 4}s`,
+            left: p.left,
+            top: p.top,
+            animationDelay: p.delay,
+            animationDuration: p.duration,
           }}
         />
       ))}

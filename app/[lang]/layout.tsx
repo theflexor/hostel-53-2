@@ -11,26 +11,27 @@ import ReactQueryProvider from "@/components/react-query-provider"
 import { ScrollToTop } from "@/components/ScrollToTop"
 import { Providers } from "./providers"
 
+console.log("ENV CHECK:", process.env.NEXT_PUBLIC_API_BASE_URL)
+
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
   variable: "--font-inter",
 })
 
-// Типизация для параметров маршрута
+/**
+ * 🔹 В Next.js 15 params — ASYNC
+ */
 interface RootLayoutProps {
   children: React.ReactNode
-  params: {
+  params: Promise<{
     lang: "ru" | "en"
-  }
+  }>
 }
 
 // ----------------------------------------------------
-// 1. ГЛОБАЛЬНЫЕ МЕТАДАННЫЕ (Унаследуются всеми страницами)
+// 1. ГЛОБАЛЬНЫЕ МЕТАДАННЫЕ
 // ----------------------------------------------------
-// Этот title и description будут использоваться как fallback, если страница
-// не определит свои собственные метаданные.
 export const metadata: Metadata = {
-  // Лучше использовать шаблон, который будет дополнен метаданными страниц
   title: {
     default: "Hostel 53 Bishkek KG",
     template: "%s | Hostel 53 Bishkek KG",
@@ -40,18 +41,19 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
-  // Не обязательно, но может быть полезно:
-  // viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
-  // generator: 'v0.dev' // Удалите это, если не нужно
 }
 
 // ----------------------------------------------------
-// 2. ROOT LAYOUT (Получает текущий язык)
+// 2. ROOT LAYOUT
 // ----------------------------------------------------
-
-// Получаем params, чтобы использовать текущий язык
-export default function RootLayout({ children, params }: RootLayoutProps) {
-  const currentLang = params.lang
+export default async function RootLayout({
+  children,
+  params,
+}: RootLayoutProps) {
+  /**
+   * ✅ ОБЯЗАТЕЛЬНО await
+   */
+  const { lang: currentLang } = await params
 
   return (
     <html lang={currentLang} suppressHydrationWarning>
@@ -71,6 +73,7 @@ export default function RootLayout({ children, params }: RootLayoutProps) {
                 <Footer />
               </div>
             </ReactQueryProvider>
+
             <Toaster position="top-center" richColors />
           </Providers>
         </ErrorBoundary>
