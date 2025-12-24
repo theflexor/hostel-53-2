@@ -18,9 +18,6 @@ const inter = Inter({
   variable: "--font-inter",
 })
 
-/**
- * 🔹 В Next.js 15 params — ASYNC
- */
 interface RootLayoutProps {
   children: React.ReactNode
   params: Promise<{
