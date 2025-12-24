@@ -47,22 +47,13 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy standalone output from builder
-COPY --from=builder /app/.next/standalone ./
+# Copy package.json and node_modules for yarn start
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
 
-# Copy static files - Next.js needs them in the standalone output
+# Copy Next.js build output
+COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/static ./.next/static
-
-# Debug: List files to verify structure (will be visible in build logs)
-RUN echo "=== Listing /app structure ===" && \
-    ls -la /app && \
-    echo "=== Listing /app/.next ===" && \
-    ls -la /app/.next && \
-    echo "=== Listing /app/.next/static ===" && \
-    ls -la /app/.next/static && \
-    echo "=== Listing /app/public ===" && \
-    ls -la /app/public
 
 # Set correct permissions
 RUN chown -R nextjs:nodejs /app
@@ -75,4 +66,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["yarn", "start"]
