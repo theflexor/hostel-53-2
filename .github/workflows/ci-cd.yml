@@ -11,7 +11,7 @@ on:
       - develop
 
 env:
-  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/hostel-app
+  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/hostel-admin
   NODE_VERSION: "20"
 
 jobs:
@@ -112,7 +112,7 @@ jobs:
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
             # Перейти в директорию проекта
-            cd ${{ secrets.DEPLOY_PATH || '/opt/hostel-app' }}
+            cd ${{ secrets.DEPLOY_PATH || '/opt/hostel-admin' }}
 
             # Создать docker-compose.yml если его нет
             if [ ! -f docker-compose.yml ]; then
@@ -122,7 +122,7 @@ jobs:
             services:
               app:
                 image: ${{ env.DOCKER_IMAGE }}:latest
-                container_name: hostel-app
+                container_name: hostel-admin
                 restart: unless-stopped
                 ports:
                   - "3000:3000"

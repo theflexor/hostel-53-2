@@ -313,10 +313,10 @@ docker image prune -a
 
 ```bash
 # На сервере
-cd /opt/hostel-app
+cd /opt/hostel-admin
 
 # Посмотреть доступные версии
-docker images your-dockerhub-username/hostel-app
+docker images your-dockerhub-username/hostel-admin
 
 # Обновить docker-compose.yml на нужную версию
 # Например: image: your-dockerhub-username/hostel-app:main-abc1234
